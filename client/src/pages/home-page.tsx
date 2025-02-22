@@ -1,5 +1,5 @@
 import { useDeputies } from "@/hooks/use-votes";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -15,8 +15,15 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">Deputātu Popularitāte</h1>
+      <div className="flex justify-between items-center mb-12">
+        <div className="animate-in fade-in duration-700">
+          <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-blue-800 to-indigo-700 bg-clip-text text-transparent drop-shadow-sm">
+            Deputātu Popularitāte
+          </h1>
+          <p className="mt-2 text-lg text-muted-foreground">
+            Sekojiet līdzi deputātu popularitātes statistikai
+          </p>
+        </div>
         <Link href="/auth">
           <Button variant="destructive">Balsot</Button>
         </Link>
