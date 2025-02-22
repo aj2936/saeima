@@ -68,6 +68,7 @@ export default function AuthPage() {
                   <Button
                     type="submit"
                     className="w-full"
+                    variant="destructive"
                     disabled={loginMutation.isPending}
                   >
                     {loginMutation.isPending ? "Notiek pieslēgšanās..." : "Pieslēgties"}
