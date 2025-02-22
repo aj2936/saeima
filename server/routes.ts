@@ -3,8 +3,16 @@ import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { setupAuth } from "./auth";
 import { storage } from "./storage";
+import rateLimit from 'express-rate-limit';
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  const limiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 stunda
+    max: 20, // Maksimums 20 pieprasījumi stundā
+    message: 'Pārāk daudz pieprasījumu, lūdzu mēģiniet vēlāk'
+  });
+
+  app.use(limiter);
   setupAuth(app);
 
   const httpServer = createServer(app);
