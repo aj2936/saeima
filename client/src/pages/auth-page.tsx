@@ -4,7 +4,6 @@ import { useLocation } from "wouter";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -26,24 +25,13 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-indigo-50">
-      <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 p-4">
-        <div className="flex flex-col justify-center">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            Deputātu Popularitātes Balsošana
-          </h1>
-          <p className="text-muted-foreground mb-8">
-            Pievienojieties mūsu platformai, lai piedalītos deputātu popularitātes vērtēšanā. Jūsu balss ietekmēs kopējo vērtējumu.
-          </p>
-        </div>
+      <div className="w-full max-w-md p-4">
+        <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          Piereģistrējies un balso
+        </h1>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Laipni lūgti!</CardTitle>
-            <CardDescription>
-              Pierakstieties vai izveidojiet jaunu kontu, lai sāktu balsot
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             <Tabs defaultValue="login">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Pieslēgties</TabsTrigger>
