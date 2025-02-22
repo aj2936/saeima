@@ -17,7 +17,7 @@ export default function HomePage() {
     <div className="container mx-auto py-8">
       <div className="flex justify-between items-center mb-12">
         <div className="animate-in fade-in duration-700">
-          <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-blue-800 to-indigo-700 bg-clip-text text-transparent drop-shadow-sm">
+          <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent drop-shadow-sm">
             Deputātu Popularitāte
           </h1>
           <p className="mt-2 text-lg text-muted-foreground">
