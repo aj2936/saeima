@@ -56,6 +56,7 @@ export default function VotingPage() {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-xl font-bold">{deputy.name}</CardTitle>
               <Button 
+                variant="destructive"
                 onClick={() => voteMutation.mutate(deputy.id)}
                 disabled={hasVotedFor(deputy.id) || userVotes?.hasVoted}
               >
