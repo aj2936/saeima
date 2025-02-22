@@ -6,6 +6,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useMutation } from "@tanstack/react-query";
+import { Link } from "wouter";
+import { HomeIcon } from "lucide-react";
 
 export default function VotingPage() {
   const { user } = useAuth();
@@ -48,6 +50,12 @@ export default function VotingPage() {
             Sveicināti {user?.username} - Jums atlikušas {remainingVotes} balsis
           </p>
         </div>
+        <Link href="/">
+          <Button variant="outline" className="flex items-center gap-2">
+            <HomeIcon className="w-4 h-4" />
+            Uz sākumu
+          </Button>
+        </Link>
       </div>
 
       <div className="grid gap-6">
