@@ -4,8 +4,6 @@ import { useLocation } from "wouter";
 import {
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +24,7 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-indigo-50">
       <div className="w-full max-w-md p-4">
-        <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold text-center mb-8">
           Piereģistrējies un balso
         </h1>
 
@@ -115,6 +113,7 @@ export default function AuthPage() {
                   <Button
                     type="submit"
                     className="w-full"
+                    variant="destructive"
                     disabled={registerMutation.isPending}
                   >
                     {registerMutation.isPending ? "Notiek reģistrācija..." : "Reģistrēties"}
