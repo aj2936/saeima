@@ -13,8 +13,8 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={HomePage} />
-      <ProtectedRoute path="/vote" component={VotingPage} />
       <Route path="/auth" component={AuthPage} />
+      <ProtectedRoute path="/vote" component={VotingPage} />
       <Route component={NotFound} />
     </Switch>
   );

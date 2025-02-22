@@ -20,7 +20,7 @@ export default function AuthPage() {
   const [registerData, setRegisterData] = useState({ username: "", password: "" });
 
   if (user) {
-    setLocation("/");
+    setLocation("/vote");
     return null;
   }
 
@@ -29,25 +29,25 @@ export default function AuthPage() {
       <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 p-4">
         <div className="flex flex-col justify-center">
           <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            Deputy Popularity Voting
+            Deputātu Popularitātes Balsošana
           </h1>
           <p className="text-muted-foreground mb-8">
-            Join our platform to participate in rating the popularity of deputies. Make your voice heard and see real-time results of the community's opinion.
+            Pievienojieties mūsu platformai, lai piedalītos deputātu popularitātes vērtēšanā. Jūsu balss ietekmēs kopējo vērtējumu.
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Welcome</CardTitle>
+            <CardTitle>Laipni lūgti!</CardTitle>
             <CardDescription>
-              Sign in to your account or create a new one to start voting
+              Pierakstieties vai izveidojiet jaunu kontu, lai sāktu balsot
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="register">Register</TabsTrigger>
+                <TabsTrigger value="login">Pieslēgties</TabsTrigger>
+                <TabsTrigger value="register">Reģistrēties</TabsTrigger>
               </TabsList>
 
               <TabsContent value="login">
@@ -59,7 +59,7 @@ export default function AuthPage() {
                   className="space-y-4"
                 >
                   <div className="space-y-2">
-                    <Label htmlFor="username">Username</Label>
+                    <Label htmlFor="username">Lietotājvārds</Label>
                     <Input
                       id="username"
                       value={loginData.username}
@@ -69,7 +69,7 @@ export default function AuthPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">Parole</Label>
                     <Input
                       id="password"
                       type="password"
@@ -84,7 +84,7 @@ export default function AuthPage() {
                     className="w-full"
                     disabled={loginMutation.isPending}
                   >
-                    {loginMutation.isPending ? "Logging in..." : "Login"}
+                    {loginMutation.isPending ? "Notiek pieslēgšanās..." : "Pieslēgties"}
                   </Button>
                 </form>
               </TabsContent>
@@ -98,7 +98,7 @@ export default function AuthPage() {
                   className="space-y-4"
                 >
                   <div className="space-y-2">
-                    <Label htmlFor="reg-username">Username</Label>
+                    <Label htmlFor="reg-username">Lietotājvārds</Label>
                     <Input
                       id="reg-username"
                       value={registerData.username}
@@ -111,7 +111,7 @@ export default function AuthPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="reg-password">Password</Label>
+                    <Label htmlFor="reg-password">Parole</Label>
                     <Input
                       id="reg-password"
                       type="password"
@@ -129,7 +129,7 @@ export default function AuthPage() {
                     className="w-full"
                     disabled={registerMutation.isPending}
                   >
-                    {registerMutation.isPending ? "Creating account..." : "Register"}
+                    {registerMutation.isPending ? "Notiek reģistrācija..." : "Reģistrēties"}
                   </Button>
                 </form>
               </TabsContent>
