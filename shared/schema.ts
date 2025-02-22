@@ -9,7 +9,7 @@ export const users = pgTable("users", {
 });
 
 export const deputies = pgTable("deputies", {
-  id: serial("id").primaryKey(),
+  id: text("id").primaryKey(),
   name: text("name").notNull(),
   faction: text("faction").notNull(),
   votes: integer("votes").notNull().default(0),

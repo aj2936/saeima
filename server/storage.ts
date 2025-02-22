@@ -96,7 +96,7 @@ export class MemStorage implements IStorage {
     if (userVote.votedDeputies.length === 5) {
       userVote.hasVoted = true;
     }
-    
+
     this.deputies.set(deputyId, deputy);
     this.userVotes.set(userId, userVote);
     return true;
