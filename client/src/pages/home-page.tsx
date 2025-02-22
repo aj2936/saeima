@@ -11,33 +11,44 @@ export default function HomePage() {
     return <div>Loading...</div>;
   }
 
+  const totalVotes = deputies?.reduce((sum, deputy) => sum + deputy.votes, 0) || 1;
+
   return (
     <div className="container mx-auto py-8">
       <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-4xl font-bold">Deputātu Popularitāte</h1>
-          <p className="text-muted-foreground">
-            Pievienojieties, lai balsotu par deputātiem
-          </p>
-        </div>
+        <h1 className="text-4xl font-bold">Deputātu Popularitāte</h1>
         <Link href="/auth">
-          <Button>Pieslēgties</Button>
+          <Button variant="destructive">Balsot</Button>
         </Link>
       </div>
 
-      <div className="grid gap-6">
-        {deputies?.map((deputy) => (
-          <Card key={deputy.id}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xl font-bold">{deputy.name}</CardTitle>
-              <div className="text-lg font-bold">{deputy.votes} balsis</div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-sm text-muted-foreground mb-2">{deputy.faction}</div>
-              <Progress value={deputy.votes} max={100} className="h-2" />
-            </CardContent>
-          </Card>
-        ))}
+      <div className="grid gap-4">
+        {deputies?.map((deputy, index) => {
+          const votePercentage = (deputy.votes / totalVotes) * 100;
+          return (
+            <Card key={deputy.id} className="bg-white">
+              <CardContent className="pt-6">
+                <div className="flex items-start gap-4">
+                  <div className="text-xl font-bold text-muted-foreground min-w-[40px]">
+                    #{index + 1}
+                  </div>
+                  <div className="flex-grow">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h3 className="font-bold text-lg">{deputy.name}</h3>
+                        <p className="text-sm text-muted-foreground">{deputy.faction}</p>
+                      </div>
+                      <div className="text-lg font-bold">
+                        {votePercentage.toFixed(0)}%
+                      </div>
+                    </div>
+                    <Progress value={votePercentage} className="h-2 bg-gray-100" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
