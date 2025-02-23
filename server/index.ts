@@ -19,9 +19,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // CORS aizsardzība
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? 'https://your-app-name.repl.co' : 'http://localhost:5000'
-}));
+app.use(cors());
 
 app.use((req, res, next) => {
   const start = Date.now();
