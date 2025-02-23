@@ -22,7 +22,7 @@ export default function HomePage() {
               Deputātu Popularitāte
             </h1>
             <p className="mt-2 text-lg text-muted-foreground">
-              Sekojiet līdzi deputātu popularitātes statistikai
+              Seko līdzi statistikai un dalies ar citiem!
             </p>
           </div>
           <Link href="/auth">
