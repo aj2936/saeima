@@ -19,7 +19,7 @@ export default function HomePage() {
         <div className="flex justify-between items-center mb-12">
           <div className="animate-in fade-in duration-700">
             <div className="flex flex-col items-start gap-6">
-              <h1 className="text-5xl font-black tracking-tighter bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent drop-shadow-sm">
+              <h1 className="text-5xl font-black tracking-tighter bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent drop-shadow-sm mb-8">
                 hinvu
               </h1>
               <div className="flex justify-between items-center">
