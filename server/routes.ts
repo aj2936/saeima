@@ -2,7 +2,8 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { setupAuth } from "./auth";
-import { storage } from "./storage";
+import { db } from "./db"; // Assuming db.ts exports a Prisma Client instance
+
 
 export async function registerRoutes(app: Express): Promise<Server> {
   setupAuth(app);
@@ -11,32 +12,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
 
   app.get("/api/deputies", async (_req, res) => {
-    const deputies = await storage.getDeputies();
+    const deputies = await db.query.deputies.findMany({
+      orderBy: (deputies, { desc }) => [desc(deputies.votes)]
+    });
     res.json(deputies);
   });
 
   app.get("/api/votes", async (req, res) => {
-    if (!req.isAuthenticated()) return res.sendStatus(401);
-    const userVotes = await storage.getUserVotes(req.user.id);
-    if (!userVotes) {
-      const newUserVotes = await storage.createUserVotes(req.user.id);
-      return res.json(newUserVotes);
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.sendStatus(401);
     }
+
+    const userVotes = await db.query.userVotes.findFirst({
+      where: (userVotes, { eq }) => eq(userVotes.userId, userId)
+    });
     res.json(userVotes);
   });
 
   app.post("/api/vote/:deputyId", async (req, res) => {
-    if (!req.isAuthenticated()) return res.sendStatus(401);
-    
-    const success = await storage.voteForDeputy(req.user.id, req.params.deputyId);
-    if (!success) {
-      return res.status(400).send("Invalid vote");
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.sendStatus(401);
     }
 
-    const deputies = await storage.getDeputies();
+    const { deputyId } = req.params;
+
+    const userVotes = await db.query.userVotes.findFirst({
+      where: (userVotes, { eq }) => eq(userVotes.userId, userId)
+    });
+
+    if (!userVotes) {
+      await db.insert(userVotes).values({
+        userId,
+        hasVoted: false,
+        votedDeputies: [deputyId]
+      });
+    } else if (userVotes.votedDeputies.length >= 5) {
+      return res.status(400).json({ error: "You have already voted 5 times" });
+    } else {
+      await db.update(userVotes)
+        .set({ 
+          votedDeputies: [...userVotes.votedDeputies, deputyId],
+          hasVoted: userVotes.votedDeputies.length + 1 >= 5
+        })
+        .where(eq(userVotes.userId, userId));
+    }
+
+    await db.update(deputies)
+      .set({ votes: sql`votes + 1` })
+      .where(eq(deputies.id, deputyId));
+
+    const updatedDeputies = await db.query.deputies.findMany({
+      orderBy: (deputies, { desc }) => [desc(deputies.votes)]
+    });
+
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ type: "VOTE_UPDATE", deputies }));
+        client.send(JSON.stringify({ type: "VOTE_UPDATE", deputies: updatedDeputies }));
       }
     });
 
@@ -44,10 +77,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/users", async (_req, res) => {
-    const users = Array.from(storage.users.values()).map(user => ({
-      id: user.id,
-      username: user.username
-    }));
+    const users = await db.query.users.findMany(); // Assuming a 'users' model in your database
     res.json(users);
   });
 
