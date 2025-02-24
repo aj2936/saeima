@@ -43,5 +43,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendStatus(200);
   });
 
+  app.get("/api/users", async (_req, res) => {
+    const users = Array.from(storage.users.values()).map(user => ({
+      id: user.id,
+      username: user.username
+    }));
+    res.json(users);
+  });
+
   return httpServer;
 }
