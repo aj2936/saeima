@@ -45,7 +45,7 @@ export default function VotingPage() {
     <div className="container mx-auto py-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-4xl font-bold">Balsot par Deputātiem</h1>
+          <h1 className="text-4xl font-bold">Balso par Deputātiem</h1>
           <p className="text-muted-foreground">
             Sveicināts! Jums atlikušas {remainingVotes} balsis
           </p>
