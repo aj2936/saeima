@@ -15,7 +15,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
         <div className="flex justify-between items-center mb-12">
           <div className="animate-in fade-in duration-700">
             <div className="flex flex-col items-start gap-6">
