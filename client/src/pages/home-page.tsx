@@ -18,12 +18,17 @@ export default function HomePage() {
       <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex justify-between items-center mb-12">
           <div className="animate-in fade-in duration-700">
-            <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent drop-shadow-sm">
-              Deputātu Popularitāte
-            </h1>
-            <p className="mt-2 text-lg text-muted-foreground">
-              Seko līdzi statistikai un dalies ar citiem!
-            </p>
+            <div className="flex flex-col items-start gap-2">
+              <h1 className="text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-purple-500 to-indigo-600 bg-clip-text text-transparent drop-shadow-sm">
+                HINVU
+              </h1>
+              <h2 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent">
+                Deputātu Popularitāte
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                Seko līdzi statistikai un dalies ar citiem!
+              </p>
+            </div>
           </div>
           <Link href="/auth">
             <Button variant="destructive">Balsot</Button>
