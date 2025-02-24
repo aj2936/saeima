@@ -18,9 +18,10 @@ export default function HomePage() {
       <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex justify-between items-center mb-12">
           <div className="animate-in fade-in duration-700">
-            <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent drop-shadow-sm">
-              Deputātu Popularitāte
-            </h1>
+            <div className="space-y-1 text-center">
+              <h1 className="text-4xl font-bold text-purple-600">Hinvu</h1>
+              <h2 className="text-3xl font-bold text-red-600">Deputātu Popularitāte</h2>
+            </div>
             <p className="mt-2 text-lg text-muted-foreground">
               Seko līdzi statistikai un dalies ar citiem!
             </p>
