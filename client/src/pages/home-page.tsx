@@ -22,17 +22,19 @@ export default function HomePage() {
               <h1 className="text-5xl font-black tracking-tighter bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent drop-shadow-sm">
                 hinvu
               </h1>
-              <h2 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent">
-                Deputātu Popularitāte
-              </h2>
+              <div className="flex justify-between items-center">
+                <h2 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent">
+                  Deputātu Popularitāte
+                </h2>
+                <Link href="/auth">
+                  <Button variant="destructive">Balsot</Button>
+                </Link>
+              </div>
               <p className="text-lg text-muted-foreground">
                 Seko līdzi statistikai un dalies ar citiem!
               </p>
             </div>
           </div>
-          <Link href="/auth">
-            <Button variant="destructive">Balsot</Button>
-          </Link>
         </div>
 
         <div className="grid gap-4">
