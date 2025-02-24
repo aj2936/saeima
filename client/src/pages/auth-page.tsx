@@ -45,7 +45,7 @@ export default function AuthPage() {
                   className="space-y-4"
                 >
                   <div className="space-y-2">
-                    <Label htmlFor="username">Lietotājvārds</Label>
+                    <Label htmlFor="username">E-pasts</Label>
                     <Input
                       id="username"
                       value={loginData.username}
@@ -85,7 +85,7 @@ export default function AuthPage() {
                   className="space-y-4"
                 >
                   <div className="space-y-2">
-                    <Label htmlFor="reg-username">Lietotājvārds</Label>
+                    <Label htmlFor="reg-username">E-pasts</Label>
                     <Input
                       id="reg-username"
                       value={registerData.username}
