@@ -3,9 +3,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useState } from 'react';
 
 export default function HomePage() {
   const { deputies, isLoading } = useDeputies();
+  const [remainingVotes, setRemainingVotes] = useState(5); // Added state for remaining votes
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -27,6 +29,7 @@ export default function HomePage() {
               </h2>
               <p className="text-lg text-muted-foreground">
                 Seko līdzi statistikai un dalies ar citiem!
+                <span>  {`Sveicināts! Jums atlikušas ${remainingVotes} balsis`}</span> {/* Added dynamic greeting */}
               </p>
             </div>
           </div>
