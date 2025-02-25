@@ -1,11 +1,12 @@
+
 import { useDeputies } from "@/hooks/use-votes";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { HomeIcon } from "lucide-react";
 import { useState } from "react";
@@ -23,47 +24,52 @@ export default function VotingPage() {
   const { deputies, userVotes, isLoading } = useDeputies();
   const { toast } = useToast();
   const [selectedFaction, setSelectedFaction] = useState<string | undefined>(undefined);
-
+  const queryClient = useQueryClient();
+  
   const voteMutation = useMutation({
     mutationFn: async (deputyId: string) => {
-      const res = await apiRequest("POST", `/api/vote/${deputyId}`);
-      const data = await res.json();
+      const res = await fetch(`/api/vote/${deputyId}`, {
+        method: 'POST',
+        credentials: 'include'
+      });
       if (!res.ok) {
-        throw new Error(data.message);
+        throw new Error('Failed to vote');
       }
-      return data;
+      return res.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/deputies"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/votes"] });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.refetchQueries({ queryKey: ["/api/deputies"] }),
+        queryClient.refetchQueries({ queryKey: ["/api/votes"] })
+      ]);
       toast({
-        title: "Balss reģistrēta", 
+        title: "Balss reģistrēta",
         description: "Jūsu balss ir veiksmīgi reģistrēta.",
       });
     },
-    onError: (error: any) => {
+    onError: () => {
       toast({
-        title: "Balsošana neizdevās",
-        description: error.message || "Neizdevās reģistrēt balsi. Lūdzu mēģiniet vēlreiz.",
+        title: "Kļūda",
+        description: "Neizdevās reģistrēt balsi. Lūdzu, mēģiniet vēlreiz.",
         variant: "destructive",
       });
     },
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (!user) {
+    return null;
   }
 
-  const remainingVotes = userVotes ? 5 - userVotes.votedDeputies.length : 5;
-  const hasVotedFor = (deputyId: string) => userVotes?.votedDeputies.includes(deputyId);
+  const uniqueFactions = Array.from(new Set(deputies.map(d => d.faction))).sort();
+  const filteredDeputies = selectedFaction
+    ? deputies.filter(d => d.faction === selectedFaction)
+    : deputies;
 
-  // Get unique factions for the filter dropdown
-  const uniqueFactions = Array.from(new Set(deputies.map(d => d.faction)));
+  const hasVotedFor = (deputyId: string) => {
+    return userVotes?.votedDeputies?.includes(deputyId) || false;
+  };
 
-  // Filter deputies based on selected faction
-  const filteredDeputies = deputies.filter(deputy => 
-    !selectedFaction || deputy.faction === selectedFaction
-  );
+  const remainingVotes = 5 - (userVotes?.votedDeputies?.length || 0);
 
   return (
     <div className="container mx-auto py-8">
