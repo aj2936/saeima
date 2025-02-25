@@ -25,6 +25,9 @@ export const userVotes = pgTable("user_votes", {
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+}).extend({
+  username: z.string().min(1, "Lietotājvārds ir obligāts").email("Jābūt derīgai e-pasta adresei"),
+  password: z.string().min(6, "Parolei jābūt vismaz 6 simbolus garai"),
 });
 
 export const insertUserVoteSchema = createInsertSchema(userVotes).pick({

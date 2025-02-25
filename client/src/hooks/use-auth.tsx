@@ -20,28 +20,38 @@ type AuthContextType = {
 type LoginData = Pick<InsertUser, "username" | "password">;
 
 export const AuthContext = createContext<AuthContextType | null>(null);
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
+
   const {
     data: user,
     error,
     isLoading,
-  } = useQuery<SelectUser | undefined, Error>({
+  } = useQuery<SelectUser | null>({
     queryKey: ["/api/user"],
     queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginData) => {
+      const validation = insertUserSchema.pick({ username: true, password: true }).safeParse(credentials);
+      if (!validation.success) {
+        throw new Error("Nederīgi pieteikšanās dati");
+      }
       const res = await apiRequest("POST", "/api/login", credentials);
       return await res.json();
     },
     onSuccess: (user: SelectUser) => {
       queryClient.setQueryData(["/api/user"], user);
+      toast({
+        title: "Veiksmīga pieteikšanās",
+        description: "Jūs esat veiksmīgi pieteicies sistēmā.",
+      });
     },
     onError: (error: Error) => {
       toast({
-        title: "Login failed",
+        title: "Pieteikšanās neizdevās",
         description: error.message,
         variant: "destructive",
       });
@@ -50,15 +60,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const registerMutation = useMutation({
     mutationFn: async (credentials: InsertUser) => {
+      const validation = insertUserSchema.safeParse(credentials);
+      if (!validation.success) {
+        throw new Error("Nederīgi reģistrācijas dati");
+      }
       const res = await apiRequest("POST", "/api/register", credentials);
       return await res.json();
     },
     onSuccess: (user: SelectUser) => {
       queryClient.setQueryData(["/api/user"], user);
+      toast({
+        title: "Veiksmīga reģistrācija",
+        description: "Jūs esat veiksmīgi reģistrējies un pieteicies sistēmā.",
+      });
     },
     onError: (error: Error) => {
       toast({
-        title: "Registration failed",
+        title: "Reģistrācija neizdevās",
         description: error.message,
         variant: "destructive",
       });
@@ -71,10 +89,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: () => {
       queryClient.setQueryData(["/api/user"], null);
+      toast({
+        title: "Izrakstīšanās veiksmīga",
+        description: "Jūs esat veiksmīgi izrakstījies no sistēmas.",
+      });
     },
     onError: (error: Error) => {
       toast({
-        title: "Logout failed",
+        title: "Izrakstīšanās neizdevās",
         description: error.message,
         variant: "destructive",
       });

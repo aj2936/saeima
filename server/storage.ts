@@ -18,7 +18,7 @@ export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private deputies: Map<string, Deputy>;
   private userVotes: Map<number, UserVote>;
-  currentId: number;
+  private currentId: number;
   sessionStore: session.Store;
 
   constructor() {
@@ -30,6 +30,43 @@ export class MemStorage implements IStorage {
       checkPeriod: 86400000,
     });
     this.initializeDeputies();
+  }
+
+  async getUser(id: number): Promise<User | undefined> {
+    try {
+      return this.users.get(id);
+    } catch (error) {
+      console.error("Error getting user:", error);
+      return undefined;
+    }
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    try {
+      return Array.from(this.users.values()).find(
+        (user) => user.username.toLowerCase() === username.toLowerCase(),
+      );
+    } catch (error) {
+      console.error("Error getting user by username:", error);
+      return undefined;
+    }
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    try {
+      const existingUser = await this.getUserByUsername(insertUser.username);
+      if (existingUser) {
+        throw new Error("Lietotājvārds jau eksistē");
+      }
+
+      const id = this.currentId++;
+      const user: User = { ...insertUser, id };
+      this.users.set(id, user);
+      return user;
+    } catch (error) {
+      console.error("Error creating user:", error);
+      throw error;
+    }
   }
 
   private initializeDeputies() {
@@ -139,23 +176,6 @@ export class MemStorage implements IStorage {
     for (const deputy of deputyData) {
       this.deputies.set(deputy.id, deputy);
     }
-  }
-
-  async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
   }
 
   async getDeputies(): Promise<Deputy[]> {
