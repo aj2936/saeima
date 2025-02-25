@@ -101,9 +101,9 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="grid gap-4 mb-6">
+        <div className="grid gap-4">
           {/* Filter toggle button */}
-          <div className="mb-2">
+          <div>
             <Button
               variant="ghost"
               onClick={() => setShowFilters(!showFilters)}
@@ -154,6 +154,7 @@ export default function HomePage() {
             </div>
           </div>
 
+          {/* Deputies list */}
           {paginatedDeputies.map((deputy, index) => {
             const votePercentage = (deputy.votes / totalVotes) * 100;
             const globalIndex = startIndex + index + 1;
@@ -183,43 +184,45 @@ export default function HomePage() {
           })}
         </div>
 
-        {/* Pagination controls */}
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <Button
-                variant="outline"
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-                className="gap-2"
-              >
-                <PaginationPrevious className="hidden" />
-                Iepriekšējā
-              </Button>
-            </PaginationItem>
-            {[...Array(totalPages)].map((_, i) => (
-              <PaginationItem key={i + 1}>
+        {/* Pagination */}
+        <div className="mt-6">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
                 <Button
-                  variant={currentPage === i + 1 ? "default" : "outline"}
-                  onClick={() => setCurrentPage(i + 1)}
+                  variant="outline"
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1}
+                  className="gap-2"
                 >
-                  {i + 1}
+                  <PaginationPrevious className="hidden" />
+                  Iepriekšējā
                 </Button>
               </PaginationItem>
-            ))}
-            <PaginationItem>
-              <Button
-                variant="outline"
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-                className="gap-2"
-              >
-                Nākamā
-                <PaginationNext className="hidden" />
-              </Button>
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+              {[...Array(totalPages)].map((_, i) => (
+                <PaginationItem key={i + 1}>
+                  <Button
+                    variant={currentPage === i + 1 ? "default" : "outline"}
+                    onClick={() => setCurrentPage(i + 1)}
+                  >
+                    {i + 1}
+                  </Button>
+                </PaginationItem>
+              ))}
+              <PaginationItem>
+                <Button
+                  variant="outline"
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                  className="gap-2"
+                >
+                  Nākamā
+                  <PaginationNext className="hidden" />
+                </Button>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
       </div>
     </div>
   );
