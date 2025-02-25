@@ -1,12 +1,9 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
-import { setupAuth } from "./auth";
 import { storage } from "./storage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  setupAuth(app);
-
   const httpServer = createServer(app);
   const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
 
@@ -21,34 +18,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/votes", async (req, res) => {
-    const userId = req.session.userId;
-    if (!userId) {
-      return res.sendStatus(401);
-    }
-
-    const userVotes = await storage.getUserVotes(userId);
-    res.json(userVotes);
+  app.get("/api/votes", async (_req, res) => {
+    res.json({ votedDeputies: [], hasVoted: false });
   });
 
   app.post("/api/vote/:deputyId", async (req, res) => {
-    const userId = req.session.userId;
-    if (!userId) {
-      return res.sendStatus(401);
-    }
-
     const { deputyId } = req.params;
+    const success = await storage.voteForDeputy(1, deputyId); // Using a default user ID for now
 
-    let userVotes = await storage.getUserVotes(userId);
-    if (!userVotes) {
-      userVotes = await storage.createUserVotes(userId);
-    }
-
-    if (userVotes.votedDeputies.length >= 5) {
-      return res.status(400).json({ error: "You have already voted 5 times" });
-    }
-
-    const success = await storage.voteForDeputy(userId, deputyId);
     if (!success) {
       return res.status(400).json({ error: "Failed to register vote" });
     }
