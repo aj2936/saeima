@@ -121,10 +121,10 @@ export default function HomePage() {
                 placeholder="Meklēt pēc vārda..."
                 value={searchTerm}
                 onChange={handleSearch}
-                className="max-w-xs"
+                className="max-w-xs bg-white/50 border-gray-100"
               />
               <Select value={selectedFaction || "all"} onValueChange={handleFactionChange}>
-                <SelectTrigger className="max-w-xs">
+                <SelectTrigger className="max-w-xs bg-white/50 border-gray-100">
                   <SelectValue placeholder="Izvēlies frakciju" />
                 </SelectTrigger>
                 <SelectContent>
@@ -139,7 +139,7 @@ export default function HomePage() {
                 </SelectContent>
               </Select>
               <Select value={sortOrder} onValueChange={(value: "name" | "votes") => setSortOrder(value)}>
-                <SelectTrigger className="max-w-xs">
+                <SelectTrigger className="max-w-xs bg-white/50 border-gray-100">
                   <SelectValue placeholder="Kārtot pēc..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -174,7 +174,7 @@ export default function HomePage() {
                           {votePercentage.toFixed(0)}%
                         </div>
                       </div>
-                      <Progress value={votePercentage} className="h-2 bg-gray-100" />
+                      <Progress value={votePercentage} className="h-2" />
                     </div>
                   </div>
                 </CardContent>
