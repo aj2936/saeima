@@ -33,13 +33,7 @@ export default function VotingPage() {
       }
       return data;
     },
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["/api/votes"] }),
-        queryClient.invalidateQueries({ queryKey: ["/api/deputies"] })
-      ]);
-      await queryClient.refetchQueries({ queryKey: ["/api/votes"] });
-      await queryClient.refetchQueries({ queryKey: ["/api/deputies"] });
+    onSuccess: () => {
       toast({
         title: "Balss reģistrēta", 
         description: "Jūsu balss ir veiksmīgi reģistrēta.",
