@@ -179,7 +179,9 @@ export class MemStorage implements IStorage {
   }
 
   async getDeputies(): Promise<Deputy[]> {
-    return Array.from(this.deputies.values()).sort((a, b) => b.votes - a.votes);
+    const allDeputies = Array.from(this.deputies.values());
+    console.log(`Returning ${allDeputies.length} deputies`); 
+    return allDeputies.sort((a, b) => b.votes - a.votes);
   }
 
   async getUserVotes(userId: number): Promise<UserVote | undefined> {

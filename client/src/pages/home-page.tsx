@@ -3,15 +3,70 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useState } from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+
+const DEPUTIES_PER_PAGE = 10;
 
 export default function HomePage() {
   const { deputies, isLoading } = useDeputies();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedFaction, setSelectedFaction] = useState("");
+  const [sortOrder, setSortOrder] = useState<"name" | "votes">("votes");
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  const totalVotes = deputies?.reduce((sum, deputy) => sum + deputy.votes, 0) || 1;
+  // Get unique factions for the filter dropdown
+  const uniqueFactions = Array.from(new Set(deputies.map(d => d.faction)));
+
+  // Filter and sort deputies
+  let filteredDeputies = deputies.filter(deputy => {
+    const matchesSearch = deputy.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFaction = !selectedFaction || deputy.faction === selectedFaction;
+    return matchesSearch && matchesFaction;
+  });
+
+  // Sort deputies
+  filteredDeputies.sort((a, b) => {
+    if (sortOrder === "name") {
+      return a.name.localeCompare(b.name);
+    }
+    return b.votes - a.votes;
+  });
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredDeputies.length / DEPUTIES_PER_PAGE);
+  const startIndex = (currentPage - 1) * DEPUTIES_PER_PAGE;
+  const paginatedDeputies = filteredDeputies.slice(startIndex, startIndex + DEPUTIES_PER_PAGE);
+
+  const totalVotes = deputies.reduce((sum, deputy) => sum + deputy.votes, 0) || 1;
+
+  const handlePreviousPage = () => {
+    setCurrentPage(p => Math.max(1, p - 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage(p => Math.min(totalPages, p + 1));
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -35,15 +90,52 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="grid gap-4">
-          {deputies?.map((deputy, index) => {
+        {/* Filters and sorting */}
+        <div className="flex flex-wrap gap-4 mb-6">
+          <Input
+            placeholder="Meklēt pēc vārda..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="max-w-xs"
+          />
+          <Select value={selectedFaction} onValueChange={setSelectedFaction}>
+            <SelectTrigger className="max-w-xs">
+              <SelectValue placeholder="Izvēlies frakciju" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="">Visas frakcijas</SelectItem>
+                {uniqueFactions.map(faction => (
+                  <SelectItem key={faction} value={faction}>
+                    {faction}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Select value={sortOrder} onValueChange={(value: "name" | "votes") => setSortOrder(value)}>
+            <SelectTrigger className="max-w-xs">
+              <SelectValue placeholder="Kārtot pēc..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="votes">Kārtot pēc balsīm</SelectItem>
+                <SelectItem value="name">Kārtot pēc vārda</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="grid gap-4 mb-6">
+          {paginatedDeputies.map((deputy, index) => {
             const votePercentage = (deputy.votes / totalVotes) * 100;
+            const globalIndex = startIndex + index + 1;
             return (
               <Card key={deputy.id} className="bg-white hover:bg-gray-50 transition-colors">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="text-xl font-bold text-muted-foreground min-w-[48px]">
-                      #{index + 1}
+                      #{globalIndex}
                     </div>
                     <div className="flex-grow">
                       <div className="flex justify-between items-start mb-2">
@@ -63,6 +155,38 @@ export default function HomePage() {
             );
           })}
         </div>
+
+        {/* Pagination controls */}
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationLink
+                onClick={handlePreviousPage}
+                className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+              >
+                <PaginationPrevious />
+              </PaginationLink>
+            </PaginationItem>
+            {[...Array(totalPages)].map((_, i) => (
+              <PaginationItem key={i + 1}>
+                <PaginationLink
+                  onClick={() => setCurrentPage(i + 1)}
+                  isActive={currentPage === i + 1}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationLink
+                onClick={handleNextPage}
+                className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+              >
+                <PaginationNext />
+              </PaginationLink>
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );

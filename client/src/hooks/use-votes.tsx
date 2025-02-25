@@ -4,11 +4,12 @@ import { queryClient } from "@/lib/queryClient";
 import type { Deputy, UserVote } from "@shared/schema";
 
 export function useDeputies() {
-  const { data: deputies } = useQuery<Deputy[]>({
+  const { data: deputies, isLoading: isDeputiesLoading } = useQuery<Deputy[]>({
     queryKey: ["/api/deputies"],
+    staleTime: 1000, // Reduce stale time to get more frequent updates
   });
 
-  const { data: userVotes, isLoading } = useQuery<UserVote>({
+  const { data: userVotes, isLoading: isVotesLoading } = useQuery<UserVote>({
     queryKey: ["/api/votes"],
   });
 
@@ -28,5 +29,11 @@ export function useDeputies() {
     };
   }, []);
 
-  return { deputies, userVotes, isLoading };
+  const isLoading = isDeputiesLoading || isVotesLoading;
+
+  return { 
+    deputies: deputies || [], 
+    userVotes, 
+    isLoading 
+  };
 }
