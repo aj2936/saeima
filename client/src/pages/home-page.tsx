@@ -101,59 +101,59 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* Filter toggle button */}
-        <div className="mb-2">
-          <Button
-            variant="ghost"
-            onClick={() => setShowFilters(!showFilters)}
-            className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2"
-          >
-            <SlidersHorizontal className="w-4 h-4" />
-            Rādīt filtrus
-          </Button>
-        </div>
+        <div className="grid gap-4 mb-6">
+          {/* Filter toggle button */}
+          <div className="mb-2">
+            <Button
+              variant="ghost"
+              onClick={() => setShowFilters(!showFilters)}
+              className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2"
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              Rādīt filtrus
+            </Button>
+          </div>
 
-        {/* Filters and sorting */}
-        <div className={`grid gap-4 mb-6 transition-all duration-300 ease-in-out ${showFilters ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-          <div className="overflow-hidden">
-            <div className="flex flex-wrap gap-4 py-4">
-              <Input
-                placeholder="Meklēt pēc vārda..."
-                value={searchTerm}
-                onChange={handleSearch}
-                className="max-w-xs bg-white/50 border-gray-100"
-              />
-              <Select value={selectedFaction || "all"} onValueChange={handleFactionChange}>
-                <SelectTrigger className="max-w-xs bg-white/50 border-gray-100">
-                  <SelectValue placeholder="Izvēlies frakciju" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="all">Visas frakcijas</SelectItem>
-                    {uniqueFactions.map(faction => (
-                      <SelectItem key={faction} value={faction}>
-                        {faction}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Select value={sortOrder} onValueChange={(value: "name" | "votes") => setSortOrder(value)}>
-                <SelectTrigger className="max-w-xs bg-white/50 border-gray-100">
-                  <SelectValue placeholder="Kārtot pēc..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="votes">Kārtot pēc balsīm</SelectItem>
-                    <SelectItem value="name">Kārtot pēc vārda</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+          {/* Filters and sorting */}
+          <div className={`grid gap-4 transition-all duration-300 ease-in-out ${showFilters ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+            <div className="overflow-hidden">
+              <div className="flex flex-wrap gap-4 py-4">
+                <Input
+                  placeholder="Meklēt pēc vārda..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="max-w-xs bg-white/50 border-gray-100"
+                />
+                <Select value={selectedFaction || "all"} onValueChange={handleFactionChange}>
+                  <SelectTrigger className="max-w-xs bg-white/50 border-gray-100">
+                    <SelectValue placeholder="Izvēlies frakciju" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="all">Visas frakcijas</SelectItem>
+                      {uniqueFactions.map(faction => (
+                        <SelectItem key={faction} value={faction}>
+                          {faction}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <Select value={sortOrder} onValueChange={(value: "name" | "votes") => setSortOrder(value)}>
+                  <SelectTrigger className="max-w-xs bg-white/50 border-gray-100">
+                    <SelectValue placeholder="Kārtot pēc..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="votes">Kārtot pēc balsīm</SelectItem>
+                      <SelectItem value="name">Kārtot pēc vārda</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="grid gap-4 mb-6">
           {paginatedDeputies.map((deputy, index) => {
             const votePercentage = (deputy.votes / totalVotes) * 100;
             const globalIndex = startIndex + index + 1;
