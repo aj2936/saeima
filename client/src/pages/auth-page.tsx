@@ -16,8 +16,9 @@ export default function AuthPage() {
   const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [registerData, setRegisterData] = useState({ username: "", password: "" });
 
+  // Redirect if already logged in
   if (user) {
-    setLocation("/vote");
+    setTimeout(() => setLocation("/vote"), 0);
     return null;
   }
 
@@ -48,6 +49,7 @@ export default function AuthPage() {
                     <Label htmlFor="username">E-pasts</Label>
                     <Input
                       id="username"
+                      type="text"
                       value={loginData.username}
                       onChange={(e) =>
                         setLoginData({ ...loginData, username: e.target.value })
@@ -88,6 +90,7 @@ export default function AuthPage() {
                     <Label htmlFor="reg-username">E-pasts</Label>
                     <Input
                       id="reg-username"
+                      type="text"
                       value={registerData.username}
                       onChange={(e) =>
                         setRegisterData({
