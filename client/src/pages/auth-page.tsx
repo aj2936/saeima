@@ -119,8 +119,8 @@ export default function AuthPage() {
                       }
                     />
                   </div>
-                  {registerMutation.error && (
-                    <p className="text-sm text-red-500">
+                  {registerMutation.error?.message && (
+                    <p className="text-red-500 text-sm mb-4 bg-red-50 p-2 rounded">
                       {registerMutation.error.message}
                     </p>
                   )}
