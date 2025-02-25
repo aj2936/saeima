@@ -82,7 +82,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-4">
           <div className="animate-in fade-in duration-700">
             <div className="flex flex-col items-start gap-6">
               <h1 className="text-5xl font-black tracking-tighter bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent drop-shadow-sm">
@@ -102,7 +102,7 @@ export default function HomePage() {
         </div>
 
         {/* Filter toggle button */}
-        <div className="mb-6">
+        <div className="mb-2">
           <Button
             variant="ghost"
             onClick={() => setShowFilters(!showFilters)}
