@@ -76,9 +76,9 @@ export function setupAuth(app: Express) {
       const data = registerSchema.parse(req.body);
 
       const existingUser = await storage.getUserByUsername(data.username);
-      if (existingUser) {
+      if (existingUser || !data.username.endsWith('@gmail.com')) {
         return res.json({ 
-          message: "Lūdzu ievadiet e-pasta adresi ar @gmail.com" 
+          message: "Lūdzu mēģiniet vēlreiz ar @gmail.com" 
         });
       }
 
