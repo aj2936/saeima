@@ -24,7 +24,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json({ votedDeputies: [], hasVoted: false });
       }
       const votes = await storage.getUserVotes(req.user.id);
-      res.json(votes);
+      res.json(votes || { votedDeputies: [], hasVoted: false });
     } catch (error) {
       console.error("Error fetching votes:", error);
       res.status(500).json({ error: "Failed to fetch votes" });
@@ -38,7 +38,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const { deputyId } = req.params;
-      const votes = await storage.getUserVotes(req.user.id);
+      const votes = await storage.getUserVotes(req.user.id) || { votedDeputies: [] };
+
+      if (!votes) {
+        // Initialize votes for new users
+        await storage.initializeUserVotes(req.user.id);
+      }
 
       if (votes.votedDeputies.length >= 5) {
         return res.status(400).json({ message: "Jūs jau esat izmantojis visas savas balsis" });
