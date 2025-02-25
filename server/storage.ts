@@ -32,43 +32,6 @@ export class MemStorage implements IStorage {
     this.initializeDeputies();
   }
 
-  async getUser(id: number): Promise<User | undefined> {
-    try {
-      return this.users.get(id);
-    } catch (error) {
-      console.error("Error getting user:", error);
-      return undefined;
-    }
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    try {
-      return Array.from(this.users.values()).find(
-        (user) => user.username.toLowerCase() === username.toLowerCase(),
-      );
-    } catch (error) {
-      console.error("Error getting user by username:", error);
-      return undefined;
-    }
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    try {
-      const existingUser = await this.getUserByUsername(insertUser.username);
-      if (existingUser) {
-        throw new Error("Lietotājvārds jau eksistē");
-      }
-
-      const id = this.currentId++;
-      const user: User = { ...insertUser, id };
-      this.users.set(id, user);
-      return user;
-    } catch (error) {
-      console.error("Error creating user:", error);
-      throw error;
-    }
-  }
-
   private initializeDeputies() {
     const deputyData = [
       { id: "1", name: "Skaidrīte Ābrama", faction: "Frakcija PROGRESĪVIE", votes: 0 },
@@ -175,6 +138,43 @@ export class MemStorage implements IStorage {
 
     for (const deputy of deputyData) {
       this.deputies.set(deputy.id, deputy);
+    }
+  }
+
+  async getUser(id: number): Promise<User | undefined> {
+    try {
+      return this.users.get(id);
+    } catch (error) {
+      console.error("Error getting user:", error);
+      return undefined;
+    }
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    try {
+      return Array.from(this.users.values()).find(
+        (user) => user.username.toLowerCase() === username.toLowerCase(),
+      );
+    } catch (error) {
+      console.error("Error getting user by username:", error);
+      return undefined;
+    }
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    try {
+      const existingUser = await this.getUserByUsername(insertUser.username);
+      if (existingUser) {
+        throw new Error("Lietotājvārds jau eksistē");
+      }
+
+      const id = this.currentId++;
+      const user: User = { ...insertUser, id };
+      this.users.set(id, user);
+      return user;
+    } catch (error) {
+      console.error("Error creating user:", error);
+      throw error;
     }
   }
 
