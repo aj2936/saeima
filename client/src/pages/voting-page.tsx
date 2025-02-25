@@ -72,7 +72,7 @@ export default function VotingPage() {
   const remainingVotes = 5 - (userVotes?.votedDeputies?.length || 0);
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-4xl font-bold">Balso par Deputātiem</h1>
