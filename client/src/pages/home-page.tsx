@@ -193,7 +193,7 @@ export default function HomePage() {
                 disabled={currentPage === 1}
                 className="gap-2"
               >
-                <PaginationPrevious />
+                <PaginationPrevious className="hidden" />
                 Iepriekšējā
               </Button>
             </PaginationItem>
@@ -215,7 +215,7 @@ export default function HomePage() {
                 className="gap-2"
               >
                 Nākamā
-                <PaginationNext />
+                <PaginationNext className="hidden" />
               </Button>
             </PaginationItem>
           </PaginationContent>
