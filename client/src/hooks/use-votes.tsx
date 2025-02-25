@@ -21,6 +21,7 @@ export function useDeputies() {
       const data = JSON.parse(event.data);
       if (data.type === "VOTE_UPDATE") {
         queryClient.setQueryData(["/api/deputies"], data.deputies);
+        queryClient.setQueryData(["/api/votes"], data.userVotes);
       }
     };
 

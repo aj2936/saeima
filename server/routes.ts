@@ -55,10 +55,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       await storage.voteForDeputy(req.user.id, deputyId);
       const updatedDeputies = await storage.getDeputies();
+      const updatedVotes = await storage.getUserVotes(req.user.id);
 
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({ type: "VOTE_UPDATE", deputies: updatedDeputies }));
+          client.send(JSON.stringify({ 
+            type: "VOTE_UPDATE", 
+            deputies: updatedDeputies,
+            userVotes: updatedVotes
+          }));
         }
       });
 
