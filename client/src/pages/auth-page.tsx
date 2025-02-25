@@ -120,7 +120,7 @@ export default function AuthPage() {
                     />
                   </div>
                   {registerMutation.error?.message && (
-                    <p className="text-white text-sm mb-4 bg-red-500 p-2 rounded rounded">
+                    <p className="text-red-500 text-sm mb-4 bg-red-50 p-2 rounded">
                       Lūdzu mēģiniet vēlreiz
                     </p>
                   )}
