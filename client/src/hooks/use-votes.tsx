@@ -21,7 +21,9 @@ export function useDeputies() {
       const data = JSON.parse(event.data);
       if (data.type === "VOTE_UPDATE") {
         queryClient.setQueryData(["/api/deputies"], data.deputies);
-        queryClient.setQueryData(["/api/votes"], data.userVotes);
+        queryClient.setQueryData(["/api/votes"], () => data.userVotes);
+        queryClient.invalidateQueries({ queryKey: ["/api/votes"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/deputies"] });
       }
     };
 
