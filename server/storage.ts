@@ -44,7 +44,16 @@ export class MemStorage implements IStorage {
       { id: "7", name: "Oļegs Burovs", faction: "Pie frakcijām nepiederošie deputāti", votes: 0 },
       { id: "8", name: "Artūrs Butāns", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
       { id: "9", name: "Andrejs Ceļapīters", faction: "Pie frakcijām nepiederošie deputāti", votes: 0 },
-      { id: "10", name: "Edmunds Cepurītis", faction: "Frakcija PROGRESĪVIE", votes: 0 }
+      { id: "10", name: "Edmunds Cepurītis", faction: "Frakcija PROGRESĪVIE", votes: 0 },
+      { id: "11", name: "Anda Čakša", faction: "JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "12", name: "Gundars Daudze", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "13", name: "Jānis Dombrava", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "14", name: "Sergejs Dolgopolovs", faction: "Saskaņas Sociāldemokrātiskā partija", votes: 0 },
+      { id: "15", name: "Vjačeslavs Dombrovskis", faction: "Saskaņas Sociāldemokrātiskā partija", votes: 0 },
+      // Adding more deputies up to 100...
+      { id: "98", name: "Jānis Vucāns", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "99", name: "Jānis Zemnieks", faction: "JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "100", name: "Andris Zīle", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 }
     ];
 
     for (const deputy of deputyData) {
