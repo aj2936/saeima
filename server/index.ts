@@ -10,7 +10,21 @@ const app = express();
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false, limit: '10kb' }));
 
-// Rate limiting - 20 pieprasījumi 15 minūtēs
+// Rate limiting - 20 requests per 15 min
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20
+});
+
+app.use(limiter);
+app.use(cors());
+
+const port = process.env.PORT || 3000;
+const server = await registerRoutes(app);
+
+server.listen(port, '0.0.0.0', () => {
+  console.log(`Server running on port ${port}`);
+});ūtēs
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
