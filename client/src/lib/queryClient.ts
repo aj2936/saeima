@@ -12,6 +12,7 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
+  console.log(`Making ${method} request to ${url}`);
   const res = await fetch(url, {
     method,
     headers: {
@@ -21,6 +22,12 @@ export async function apiRequest(
     body: data ? JSON.stringify(data) : undefined,
     credentials: "include",
   });
+
+  if (!res.ok) {
+    console.error(`API request failed: ${res.status} ${res.statusText}`);
+  } else {
+    console.log(`API request successful: ${res.status}`);
+  }
 
   await throwIfResNotOk(res);
   return res;
@@ -32,6 +39,7 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
+    console.log(`Making query request to ${queryKey[0]}`);
     const res = await fetch(queryKey[0] as string, {
       credentials: "include",
       headers: {
@@ -40,7 +48,14 @@ export const getQueryFn: <T>(options: {
     });
 
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {
+      console.log('Received 401, returning null as configured');
       return null;
+    }
+
+    if (!res.ok) {
+      console.error(`Query request failed: ${res.status} ${res.statusText}`);
+    } else {
+      console.log(`Query request successful: ${res.status}`);
     }
 
     await throwIfResNotOk(res);
@@ -57,8 +72,10 @@ export const queryClient = new QueryClient({
       retry: (failureCount, error) => {
         // Don't retry on 401 errors
         if (error instanceof Error && error.message.includes("401")) {
+          console.log('Not retrying 401 error');
           return false;
         }
+        console.log(`Retrying query (attempt ${failureCount + 1})`);
         return failureCount < 3;
       },
     },
