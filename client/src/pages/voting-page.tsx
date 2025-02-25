@@ -35,10 +35,10 @@ export default function VotingPage() {
         description: "Jūsu balss ir veiksmīgi reģistrēta.",
       });
     },
-    onError: (error: Error) => {
+    onError: (error: any) => {
       toast({
         title: "Balsošana neizdevās",
-        description: error.message,
+        description: "Neizdevās reģistrēt balsi. Lūdzu mēģiniet vēlreiz.",
         variant: "destructive",
       });
     },

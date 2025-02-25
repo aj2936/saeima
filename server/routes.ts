@@ -23,11 +23,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post("/api/vote/:deputyId", async (req, res) => {
+    if (!req.user?.id) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    
     const { deputyId } = req.params;
-    const success = await storage.voteForDeputy(1, deputyId); // Using a default user ID for now
+    const success = await storage.voteForDeputy(req.user.id, deputyId);
 
     if (!success) {
-      return res.status(400).json({ error: "Failed to register vote" });
+      return res.status(400).json({ message: "Failed to register vote" });
     }
 
     const updatedDeputies = await storage.getDeputies();
