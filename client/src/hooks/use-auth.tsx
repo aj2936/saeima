@@ -44,11 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       queryClient.setQueryData(["/api/user"], user);
     },
     onError: (error: Error) => {
-      toast({
-        title: "Login failed",
-        description: "An error occurred. Please try again later.",
-        variant: "destructive",
-      });
+      // Silent error handling
     },
   });
 
