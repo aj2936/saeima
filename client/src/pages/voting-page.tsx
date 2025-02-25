@@ -34,6 +34,8 @@ export default function VotingPage() {
       return data;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/deputies"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/votes"] });
       toast({
         title: "Balss reģistrēta", 
         description: "Jūsu balss ir veiksmīgi reģistrēta.",
