@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { queryClient } from "@/lib/queryClient";
@@ -6,11 +7,12 @@ import type { Deputy, UserVote } from "@shared/schema";
 export function useDeputies() {
   const { data: deputies, isLoading: isDeputiesLoading } = useQuery<Deputy[]>({
     queryKey: ["/api/deputies"],
-    staleTime: 1000, // Reduce stale time to get more frequent updates
+    staleTime: 0,
   });
 
   const { data: userVotes, isLoading: isVotesLoading } = useQuery<UserVote>({
     queryKey: ["/api/votes"],
+    staleTime: 0,
   });
 
   useEffect(() => {
@@ -18,10 +20,14 @@ export function useDeputies() {
     const ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
 
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === "VOTE_UPDATE") {
-        queryClient.setQueryData(["/api/deputies"], data.deputies);
-        queryClient.setQueryData(["/api/votes"], data.userVotes);
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === "VOTE_UPDATE") {
+          queryClient.invalidateQueries({ queryKey: ["/api/deputies"] });
+          queryClient.invalidateQueries({ queryKey: ["/api/votes"] });
+        }
+      } catch (err) {
+        console.error("WebSocket message error:", err);
       }
     };
 
@@ -30,11 +36,9 @@ export function useDeputies() {
     };
   }, []);
 
-  const isLoading = isDeputiesLoading || isVotesLoading;
-
   return { 
     deputies: deputies || [], 
     userVotes, 
-    isLoading 
+    isLoading: isDeputiesLoading || isVotesLoading 
   };
 }
