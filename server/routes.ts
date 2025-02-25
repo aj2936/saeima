@@ -38,11 +38,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const { deputyId } = req.params;
-      const votes = await storage.getUserVotes(req.user.id) || { votedDeputies: [] };
-
+      let votes = await storage.getUserVotes(req.user.id);
       if (!votes) {
-        // Initialize votes for new users
-        await storage.initializeUserVotes(req.user.id);
+        votes = await storage.createUserVotes(req.user.id);
       }
 
       if (votes.votedDeputies.length >= 5) {

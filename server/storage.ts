@@ -189,13 +189,16 @@ export class MemStorage implements IStorage {
   }
 
   async createUserVotes(userId: number): Promise<UserVote> {
-    const userVote: UserVote = {
-      id: userId,
-      userId,
-      hasVoted: false,
-      votedDeputies: [],
-    };
-    this.userVotes.set(userId, userVote);
+    let userVote = this.userVotes.get(userId);
+    if (!userVote) {
+      userVote = {
+        id: userId,
+        userId,
+        hasVoted: false,
+        votedDeputies: [],
+      };
+      this.userVotes.set(userId, userVote);
+    }
     return userVote;
   }
 
@@ -207,10 +210,6 @@ export class MemStorage implements IStorage {
     if (!deputy) return false;
 
     deputy.votes += 1;
-    userVote.votedDeputies.push(deputyId);
-    this.deputies.set(deputyId, deputy);
-    this.userVotes.set(userId, userVote);
-    return true;otes++;
     userVote.votedDeputies.push(deputyId);
     if (userVote.votedDeputies.length === 5) {
       userVote.hasVoted = true;
