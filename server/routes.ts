@@ -13,7 +13,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/deputies", async (_req, res) => {
     const deputies = await db.query.deputies.findMany({
-      orderBy: (deputies, { desc }) => [desc(deputies.votes)]
+      orderBy: (deputies, { desc }) => [desc(deputies.votes)],
+      limit: 100
     });
     res.json(deputies);
   });
