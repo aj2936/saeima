@@ -18,7 +18,7 @@ const scryptAsync = promisify(scrypt);
 
 const registerSchema = z.object({
   username: z.string().email("E-pasta adrese nav derīga"),
-  password: z.string().min(6, "Parolei jābūt vismaz 6 simbolus garai"),
+  password: z.string().min(1, "Parolei jābūt vismaz 1 simbolam garam"),
 });
 
 async function hashPassword(password: string) {
