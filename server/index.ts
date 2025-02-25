@@ -3,6 +3,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
+import { setupAuth } from "./auth";
 
 const app = express();
 
@@ -10,13 +11,11 @@ const app = express();
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false, limit: '10kb' }));
 
-app.set('trust proxy', true);
-
 // Rate limiting - 500 pieprasījumi 15 minūtēs
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 500,
-  message: 'Pārāk daudz pieprasījumu no šīs IP adreses, lūdzu mēģiniet vēlāk',
+  message: { message: 'Pārāk daudz pieprasījumu no šīs IP adreses, lūdzu mēģiniet vēlāk' },
   standardHeaders: true,
   legacyHeaders: false
 });
@@ -64,14 +63,20 @@ app.use((req, res, next) => {
 
 (async () => {
   try {
+    // Setup auth before routes
+    setupAuth(app);
+
     const server = await registerRoutes(app);
 
+    // JSON error handling middleware
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-      const status = err.status || err.statusCode || 500;
-      const message = err.message || "Internal Server Error";
-
       console.error("Server error:", err);
-      res.status(status).json({ message });
+
+      // Ensure we always return JSON
+      res.status(err.status || 500).json({
+        message: err.message || "Kļūda serverī",
+        errors: err.errors
+      });
     });
 
     if (app.get("env") === "development") {
