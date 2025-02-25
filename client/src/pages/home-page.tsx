@@ -15,7 +15,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
         <div className="flex justify-between items-center mb-12">
           <div className="animate-in fade-in duration-700">
             <div className="flex flex-col items-start gap-6">
@@ -39,10 +39,10 @@ export default function HomePage() {
           {deputies?.map((deputy, index) => {
             const votePercentage = (deputy.votes / totalVotes) * 100;
             return (
-              <Card key={deputy.id} className="bg-white">
+              <Card key={deputy.id} className="bg-white hover:bg-gray-50 transition-colors">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
-                    <div className="text-xl font-bold text-muted-foreground min-w-[40px]">
+                    <div className="text-xl font-bold text-muted-foreground min-w-[48px]">
                       #{index + 1}
                     </div>
                     <div className="flex-grow">
