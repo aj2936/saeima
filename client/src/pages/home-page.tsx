@@ -8,7 +8,6 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
@@ -28,7 +27,7 @@ export default function HomePage() {
   const { deputies, isLoading } = useDeputies();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedFaction, setSelectedFaction] = useState("");
+  const [selectedFaction, setSelectedFaction] = useState<string | undefined>(undefined);
   const [sortOrder, setSortOrder] = useState<"name" | "votes">("votes");
 
   if (isLoading) {
@@ -68,6 +67,16 @@ export default function HomePage() {
     setCurrentPage(p => Math.min(totalPages, p + 1));
   };
 
+  const handleFactionChange = (value: string) => {
+    setSelectedFaction(value || undefined);
+    setCurrentPage(1); // Reset to first page when filter changes
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page when search changes
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
@@ -95,16 +104,16 @@ export default function HomePage() {
           <Input
             placeholder="Meklēt pēc vārda..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearch}
             className="max-w-xs"
           />
-          <Select value={selectedFaction} onValueChange={setSelectedFaction}>
+          <Select value={selectedFaction || ""} onValueChange={handleFactionChange}>
             <SelectTrigger className="max-w-xs">
               <SelectValue placeholder="Izvēlies frakciju" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem key="all" value="">Visas frakcijas</SelectItem>
+                <SelectItem value="all">Visas frakcijas</SelectItem>
                 {uniqueFactions.map(faction => (
                   <SelectItem key={faction} value={faction}>
                     {faction}
@@ -160,30 +169,36 @@ export default function HomePage() {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationLink
+              <Button 
+                variant="outline" 
                 onClick={handlePreviousPage}
-                className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                disabled={currentPage === 1}
+                className="gap-2"
               >
                 <PaginationPrevious />
-              </PaginationLink>
+                Iepriekšējā
+              </Button>
             </PaginationItem>
             {[...Array(totalPages)].map((_, i) => (
               <PaginationItem key={i + 1}>
-                <PaginationLink
+                <Button
+                  variant={currentPage === i + 1 ? "default" : "outline"}
                   onClick={() => setCurrentPage(i + 1)}
-                  isActive={currentPage === i + 1}
                 >
                   {i + 1}
-                </PaginationLink>
+                </Button>
               </PaginationItem>
             ))}
             <PaginationItem>
-              <PaginationLink
+              <Button 
+                variant="outline" 
                 onClick={handleNextPage}
-                className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                disabled={currentPage === totalPages}
+                className="gap-2"
               >
+                Nākamā
                 <PaginationNext />
-              </PaginationLink>
+              </Button>
             </PaginationItem>
           </PaginationContent>
         </Pagination>
