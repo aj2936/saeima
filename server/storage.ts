@@ -206,7 +206,11 @@ export class MemStorage implements IStorage {
     const deputy = this.deputies.get(deputyId);
     if (!deputy) return false;
 
-    deputy.votes++;
+    deputy.votes += 1;
+    userVote.votedDeputies.push(deputyId);
+    this.deputies.set(deputyId, deputy);
+    this.userVotes.set(userId, userVote);
+    return true;otes++;
     userVote.votedDeputies.push(deputyId);
     if (userVote.votedDeputies.length === 5) {
       userVote.hasVoted = true;

@@ -53,17 +53,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Jūs jau esat nobalsojis par šo deputātu" });
       }
 
-      await storage.voteForDeputy(req.user.id, deputyId);
+      const success = await storage.voteForDeputy(req.user.id, deputyId);
+      if (!success) {
+        return res.status(400).json({ message: "Neizdevās nobalsot" });
+      }
+      
       const updatedDeputies = await storage.getDeputies();
       const updatedVotes = await storage.getUserVotes(req.user.id);
 
+      // Broadcast updates to all connected clients
+      const updateMessage = JSON.stringify({
+        type: "VOTE_UPDATE",
+        deputies: updatedDeputies,
+        userVotes: updatedVotes
+      });
+
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({ 
-            type: "VOTE_UPDATE", 
-            deputies: updatedDeputies,
-            userVotes: updatedVotes
-          }));
+          client.send(updateMessage);
         }
       });
 
