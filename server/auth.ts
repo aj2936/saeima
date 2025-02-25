@@ -17,7 +17,7 @@ declare global {
 const scryptAsync = promisify(scrypt);
 
 const registerSchema = z.object({
-  username: z.string().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Lūdzu ievadiet derīgu e-pasta adresi ar @gmail.com"),
+  username: z.string().regex(/^[^\s@]+@gmail\.com$/, "Lūdzu ievadiet e-pasta adresi ar @gmail.com"),
   password: z.string().min(1, "Parolei jābūt vismaz 1 simbolam garam"),
 });
 
@@ -97,9 +97,9 @@ export function setupAuth(app: Express) {
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
+        // Return only the first error message in a simplified format
         return res.status(400).json({ 
-          message: "Nederīgi ievades dati",
-          errors: error.errors 
+          message: error.errors[0]?.message || "Nederīgi ievades dati"
         });
       }
       console.error("Registration error:", error);
@@ -112,19 +112,19 @@ export function setupAuth(app: Express) {
   app.post("/api/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
       if (err) {
-        return res.status(500).json({ 
-          message: "Kļūda autentifikācijas procesā" 
+        return res.status(500).json({
+          message: "Kļūda autentifikācijas procesā",
         });
       }
       if (!user) {
-        return res.status(401).json({ 
-          message: info?.message || "Nepareizs e-pasts vai parole" 
+        return res.status(401).json({
+          message: info?.message || "Nepareizs e-pasts vai parole",
         });
       }
       req.login(user, (err) => {
         if (err) {
-          return res.status(500).json({ 
-            message: "Kļūda lietotāja autentifikācijā" 
+          return res.status(500).json({
+            message: "Kļūda lietotāja autentifikācijā",
           });
         }
         res.json(user);
@@ -135,8 +135,8 @@ export function setupAuth(app: Express) {
   app.post("/api/logout", (req, res) => {
     req.logout((err) => {
       if (err) {
-        return res.status(500).json({ 
-          message: "Kļūda izrakstīšanās procesā" 
+        return res.status(500).json({
+          message: "Kļūda izrakstīšanās procesā",
         });
       }
       res.sendStatus(200);
@@ -145,8 +145,8 @@ export function setupAuth(app: Express) {
 
   app.get("/api/user", (req, res) => {
     if (!req.isAuthenticated()) {
-      return res.status(401).json({ 
-        message: "Nav autorizēts" 
+      return res.status(401).json({
+        message: "Nav autorizēts",
       });
     }
     res.json(req.user);
