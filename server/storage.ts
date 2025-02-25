@@ -14,11 +14,11 @@ export interface IStorage {
   sessionStore: session.Store;
 }
 
-export class Storage implements IStorage {
+export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private deputies: Map<string, Deputy>;
   private userVotes: Map<number, UserVote>;
-  private currentId: number;
+  currentId: number;
   sessionStore: session.Store;
 
   constructor() {
@@ -30,43 +30,6 @@ export class Storage implements IStorage {
       checkPeriod: 86400000,
     });
     this.initializeDeputies();
-  }
-
-  async getUser(id: number): Promise<User | undefined> {
-    try {
-      return this.users.get(id);
-    } catch (error) {
-      console.error("Error getting user:", error);
-      return undefined;
-    }
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    try {
-      return Array.from(this.users.values()).find(
-        (user) => user.username.toLowerCase() === username.toLowerCase(),
-      );
-    } catch (error) {
-      console.error("Error getting user by username:", error);
-      return undefined;
-    }
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    try {
-      const existingUser = await this.getUserByUsername(insertUser.username);
-      if (existingUser) {
-        throw new Error("Lietotājvārds jau eksistē");
-      }
-
-      const id = this.currentId++;
-      const user: User = { ...insertUser, id };
-      this.users.set(id, user);
-      return user;
-    } catch (error) {
-      console.error("Error creating user:", error);
-      throw error;
-    }
   }
 
   private initializeDeputies() {
@@ -86,89 +49,89 @@ export class Storage implements IStorage {
       { id: "13", name: "Svetlana Čulkova", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
       { id: "14", name: "Mārtiņš Daģis", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
       { id: "15", name: "Gundars Daudze", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "16", name: "Anda Čakša", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "17", name: "Sergejs Dolgopolovs", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
-      { id: "18", name: "Jānis Dombrava", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "19", name: "Jānis Dūklavs", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "20", name: "Raivis Dzintars", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "21", name: "Ainārs Eglītis", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "22", name: "Līga Eiduka", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "23", name: "Andris Felss", faction: "Frakcija PROGRESĪVIE", votes: 0 },
-      { id: "24", name: "Māris Grīnbergs", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "25", name: "Aldis Gobzems", faction: "Pie frakcijām nepiederošie deputāti", votes: 0 },
-      { id: "26", name: "Edgars Gribusts", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "27", name: "Linda Jākobsone", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "28", name: "Aija Kalniņa", faction: "Frakcija PROGRESĪVIE", votes: 0 },
-      { id: "29", name: "Māris Keišs", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "30", name: "Mārtiņš Kossovičs", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
-      { id: "31", name: "Jānis Krišāns", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "32", name: "Sandis Ķirsis", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "33", name: "Andris Kulbergs", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "34", name: "Aleksejs Loskutovs", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "35", name: "Māris Līguts", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "36", name: "Viktorija Meikšāne", faction: "Frakcija PROGRESĪVIE", votes: 0 },
-      { id: "37", name: "Skaidrīte Mežaka", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "38", name: "Ņikita Ņikiforovs", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
-      { id: "39", name: "Vitālijs Orlovs", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
-      { id: "40", name: "Gunārs Ozols", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "41", name: "Ainars Pabērzs", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "42", name: "Ingmārs Pūķis", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "43", name: "Evija Papule", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
-      { id: "44", name: "Zigfrīds Pabērzs", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "45", name: "Antoņina Ponomarjova", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
-      { id: "46", name: "Dagmāra Prūse", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "47", name: "Edmunds Rancāns", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "48", name: "Artūrs Rūsis", faction: "Frakcija PROGRESĪVIE", votes: 0 },
-      { id: "49", name: "Andris Skride", faction: "Frakcija PROGRESĪVIE", votes: 0 },
-      { id: "50", name: "Andris Sprūds", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "51", name: "Jānis Strazdiņš", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "52", name: "Edvīns Šnore", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "53", name: "Vita Anda Tērauda", faction: "Frakcija PROGRESĪVIE", votes: 0 },
-      { id: "54", name: "Nauris Treibergs", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "55", name: "Jānis Trupovnieks", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "56", name: "Normunds Urbanovičs", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
-      { id: "57", name: "Jānis Urbanovičs", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
-      { id: "58", name: "Juris Viļums", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "59", name: "Igors Rajevs", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
-      { id: "60", name: "Armands Rasčevskis", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "61", name: "Artūrs Toms Plešs", faction: "Frakcija PROGRESĪVIE", votes: 0 },
-      { id: "62", name: "Uģis Rotbergs", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "63", name: "Andris Rāviņš", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "64", name: "Ivars Puga", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "65", name: "Kaspars Melnis", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "66", name: "Linda Matisone", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "67", name: "Arvils Ašeradens", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "68", name: "Ainars Bašķis", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "69", name: "Viktors Valainis", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "70", name: "Uldis Augulis", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "71", name: "Līga Kozlovska", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "72", name: "Atis Deksnis", faction: "Frakcija PROGRESĪVIE", votes: 0 },
-      { id: "73", name: "Reinis Znotiņš", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "74", name: "Zanda Kalniņa-Lukaševica", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "75", name: "Edmunds Jurēvics", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "76", name: "Jānis Vitenbergs", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "77", name: "Māris Kučinskis", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
-      { id: "78", name: "Agnese Krasta", faction: "Frakcija PROGRESĪVIE", votes: 0 },
-      { id: "79", name: "Jānis Skrastiņš", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "80", name: "Vjačeslavs Dombrovskis", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "81", name: "Uģis Mitrevics", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "82", name: "Krišjānis Feldmans", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "83", name: "Ainars Latkovskis", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
-      { id: "84", name: "Aivars Geidāns", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "85", name: "Andris Bite", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "86", name: "Dana Reizniece-Ozola", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "87", name: "Didzis Šmits", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "88", name: "Edgars Tavars", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "89", name: "Gundars Ruža", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "90", name: "Inga Bērziņa", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "91", name: "Ingmārs Līdaka", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "92", name: "Juris Jakovins", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "93", name: "Līga Kļaviņa", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "94", name: "Romāns Naudiņš", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "95", name: "Viktors Ščerbatihs", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "96", name: "Armands Krauze", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
-      { id: "97", name: "Janīna Kursīte-Pakule", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
-      { id: "98", name: "Jānis Cielēns", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "16", name: "Dāvis Mārtiņš Daugavietis", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "17", name: "Jānis Dombrava", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "18", name: "Jekaterina Drelinga", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
+      { id: "19", name: "Raivis Dzintars", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "20", name: "Mārtiņš Felss", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "21", name: "Alīna Gendele", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "22", name: "Ligita Gintere", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "23", name: "Jānis Grasbergs", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "24", name: "Ilze Indriksone", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "25", name: "Iļja Ivanovs", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
+      { id: "26", name: "Juris Jakovins", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "27", name: "Mārcis Jencītis", faction: "Frakcija LATVIJA PIRMAJĀ VIETĀ", votes: 0 },
+      { id: "28", name: "Andrejs Judins", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "29", name: "Igors Judins", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
+      { id: "30", name: "Edmunds Jurēvics", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "31", name: "Zanda Kalniņa-Lukaševica", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "32", name: "Inese Kalniņa", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "33", name: "Irma Kalniņa", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "34", name: "Aleksandrs Kiršteins", faction: "Pie frakcijām nepiederošie deputāti", votes: 0 },
+      { id: "35", name: "Jefimijs Klementjevs", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
+      { id: "36", name: "Jurģis Klotiņš", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "37", name: "Līga Kļaviņa", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "38", name: "Dmitrijs Kovaļenko", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
+      { id: "39", name: "Līga Kozlovska", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "40", name: "Agnese Krasta", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "41", name: "Ģirts Valdis Kristovskis", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "42", name: "Kristaps Krištopans", faction: "Frakcija LATVIJA PIRMAJĀ VIETĀ", votes: 0 },
+      { id: "43", name: "Māris Kučinskis", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
+      { id: "44", name: "Andris Kulbergs", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
+      { id: "45", name: "Gunārs Kūtris", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "46", name: "Ervins Labanovskis", faction: "Frakcija PROGRESĪVIE", votes: 0 },
+      { id: "47", name: "Atis Labucis", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "48", name: "Ainars Latkovskis", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "49", name: "Ingmārs Līdaka", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
+      { id: "50", name: "Linda Liepiņa", faction: "Frakcija LATVIJA PIRMAJĀ VIETĀ", votes: 0 },
+      { id: "51", name: "Gatis Liepiņš", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "52", name: "Lauris Lizbovskis", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
+      { id: "53", name: "Mairita Lūse", faction: "Frakcija PROGRESĪVIE", votes: 0 },
+      { id: "54", name: "Nataļja Marčenko-Jodko", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
+      { id: "55", name: "Valdis Maslovskis", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "56", name: "Linda Matisone", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
+      { id: "57", name: "Daiga Mieriņa", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "58", name: "Uģis Mitrevics", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "59", name: "Ināra Mūrniece", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "60", name: "Antoņina Ņenaševa", faction: "Frakcija PROGRESĪVIE", votes: 0 },
+      { id: "61", name: "Jānis Patmalnieks", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "62", name: "Ramona Petraviča", faction: "Frakcija LATVIJA PIRMAJĀ VIETĀ", votes: 0 },
+      { id: "63", name: "Viktorija Pleškāne", faction: "Pie frakcijām nepiederošie deputāti", votes: 0 },
+      { id: "64", name: "Viktors Pučka", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
+      { id: "65", name: "Nauris Puntulis", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "66", name: "Edgars Putra", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
+      { id: "67", name: "Igors Rajevs", faction: "Pie frakcijām nepiederošie deputāti", votes: 0 },
+      { id: "68", name: "Anna Rancāne", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "69", name: "Leila Rasima", faction: "Frakcija PROGRESĪVIE", votes: 0 },
+      { id: "70", name: "Jānis Reirs", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "71", name: "Harijs Rokpelnis", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "72", name: "Aleksejs Rosļikovs", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
+      { id: "73", name: "Uģis Rotbergs", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "74", name: "Amils Saļimovs", faction: "Frakcija \"Stabilitātei!\"", votes: 0 },
+      { id: "75", name: "Jana Simanovska", faction: "Frakcija PROGRESĪVIE", votes: 0 },
+      { id: "76", name: "Jānis Skrastiņš", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "77", name: "Zane Skujiņa-Rubene", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "78", name: "Edvards Smiltēns", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
+      { id: "79", name: "Māris Sprindžuks", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
+      { id: "80", name: "Ilze Stobova", faction: "Frakcija LATVIJA PIRMAJĀ VIETĀ", votes: 0 },
+      { id: "81", name: "Ainārs Šlesers", faction: "Frakcija LATVIJA PIRMAJĀ VIETĀ", votes: 0 },
+      { id: "82", name: "Ričards Šlesers", faction: "Frakcija LATVIJA PIRMAJĀ VIETĀ", votes: 0 },
+      { id: "83", name: "Didzis Šmits", faction: "Pie frakcijām nepiederošie deputāti", votes: 0 },
+      { id: "84", name: "Edvīns Šnore", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "85", name: "Ģirts Štekerhofs", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "86", name: "Andris Šuvajevs", faction: "Frakcija PROGRESĪVIE", votes: 0 },
+      { id: "87", name: "Atis Švinka", faction: "Frakcija PROGRESĪVIE", votes: 0 },
+      { id: "88", name: "Edgars Tavars", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
+      { id: "89", name: "Edmunds Teirumnieks", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "90", name: "Ilze Vergina", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "91", name: "Aiva Vīksna", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
+      { id: "92", name: "Andrejs Vilks", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "93", name: "Juris Viļums", faction: "Frakcija \"APVIENOTAIS SARAKSTS\"", votes: 0 },
+      { id: "94", name: "Jānis Vitenbergs", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
+      { id: "95", name: "Jānis Vucāns", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
+      { id: "96", name: "Agita Zariņa-Stūre", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "97", name: "Viesturs Zariņš", faction: "Frakcija JAUNĀ VIENOTĪBA", votes: 0 },
+      { id: "98", name: "Edgars Zelderis", faction: "Pie frakcijām nepiederošie deputāti", votes: 0 },
       { id: "99", name: "Didzis Zemmers", faction: "Zaļo un Zemnieku savienības frakcija", votes: 0 },
       { id: "100", name: "Edmunds Zivtiņš", faction: "Frakcija LATVIJA PIRMAJĀ VIETĀ", votes: 0 }
     ];
@@ -176,6 +139,23 @@ export class Storage implements IStorage {
     for (const deputy of deputyData) {
       this.deputies.set(deputy.id, deputy);
     }
+  }
+
+  async getUser(id: number): Promise<User | undefined> {
+    return this.users.get(id);
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(
+      (user) => user.username === username,
+    );
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const id = this.currentId++;
+    const user: User = { ...insertUser, id };
+    this.users.set(id, user);
+    return user;
   }
 
   async getDeputies(): Promise<Deputy[]> {
@@ -206,13 +186,14 @@ export class Storage implements IStorage {
 
     deputy.votes++;
     userVote.votedDeputies.push(deputyId);
-    if (userVote.votedDeputies.length >= 5) {
+    if (userVote.votedDeputies.length === 5) {
       userVote.hasVoted = true;
     }
+
     this.deputies.set(deputyId, deputy);
     this.userVotes.set(userId, userVote);
     return true;
   }
 }
 
-export const storage = new Storage();
+export const storage = new MemStorage();

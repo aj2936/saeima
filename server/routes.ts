@@ -2,9 +2,8 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { setupAuth } from "./auth";
-import { db } from "./db";
-import { and, eq, sql } from "drizzle-orm";
-import { deputies, userVotes } from "@shared/schema";
+import { db } from "./db"; // Assuming db.ts exports a Prisma Client instance
+
 
 export async function registerRoutes(app: Express): Promise<Server> {
   setupAuth(app);
@@ -13,77 +12,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
 
   app.get("/api/deputies", async (_req, res) => {
-    const allDeputies = await db.query.deputies.findMany({
+    const deputies = await db.query.deputies.findMany({
       orderBy: (deputies, { desc }) => [desc(deputies.votes)]
     });
-    res.json(allDeputies);
+    res.json(deputies);
   });
 
   app.get("/api/votes", async (req, res) => {
-    if (!req.user?.id) {
+    const userId = req.session.userId;
+    if (!userId) {
       return res.sendStatus(401);
     }
 
-    const votes = await db.query.userVotes.findFirst({
-      where: (userVotes, { eq }) => eq(userVotes.userId, req.user!.id)
+    const userVotes = await db.query.userVotes.findFirst({
+      where: (userVotes, { eq }) => eq(userVotes.userId, userId)
     });
-    res.json(votes || { userId: req.user.id, hasVoted: false, votedDeputies: [] });
+    res.json(userVotes);
   });
 
   app.post("/api/vote/:deputyId", async (req, res) => {
-    if (!req.user?.id) {
+    const userId = req.session.userId;
+    if (!userId) {
       return res.sendStatus(401);
     }
 
     const { deputyId } = req.params;
 
-    try {
-      const existingVotes = await db.query.userVotes.findFirst({
-        where: (userVotes, { eq }) => eq(userVotes.userId, req.user!.id)
+    const userVotes = await db.query.userVotes.findFirst({
+      where: (userVotes, { eq }) => eq(userVotes.userId, userId)
+    });
+
+    if (!userVotes) {
+      await db.insert(userVotes).values({
+        userId,
+        hasVoted: false,
+        votedDeputies: [deputyId]
       });
-
-      if (!existingVotes) {
-        await db.insert(userVotes).values({
-          userId: req.user.id,
-          hasVoted: false,
-          votedDeputies: [deputyId]
-        });
-      } else if (existingVotes.votedDeputies.length >= 5) {
-        return res.status(400).json({ message: "Jūs jau esat izmantojis visas 5 balsis" });
-      } else if (existingVotes.votedDeputies.includes(deputyId)) {
-        return res.status(400).json({ message: "Jūs jau esat nobalsojis par šo deputātu" });
-      } else {
-        await db.update(userVotes)
-          .set({ 
-            votedDeputies: [...existingVotes.votedDeputies, deputyId],
-            hasVoted: existingVotes.votedDeputies.length + 1 >= 5
-          })
-          .where(eq(userVotes.userId, req.user.id));
-      }
-
-      await db.update(deputies)
-        .set({ votes: sql`votes + 1` })
-        .where(eq(deputies.id, deputyId));
-
-      const updatedDeputies = await db.query.deputies.findMany({
-        orderBy: (deputies, { desc }) => [desc(deputies.votes)]
-      });
-
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({ type: "VOTE_UPDATE", deputies: updatedDeputies }));
-        }
-      });
-
-      res.sendStatus(200);
-    } catch (error) {
-      console.error("Balsošanas kļūda:", error);
-      res.status(500).json({ message: "Radās kļūda balsošanas laikā" });
+    } else if (userVotes.votedDeputies.length >= 5) {
+      return res.status(400).json({ error: "You have already voted 5 times" });
+    } else {
+      await db.update(userVotes)
+        .set({ 
+          votedDeputies: [...userVotes.votedDeputies, deputyId],
+          hasVoted: userVotes.votedDeputies.length + 1 >= 5
+        })
+        .where(eq(userVotes.userId, userId));
     }
+
+    await db.update(deputies)
+      .set({ votes: sql`votes + 1` })
+      .where(eq(deputies.id, deputyId));
+
+    const updatedDeputies = await db.query.deputies.findMany({
+      orderBy: (deputies, { desc }) => [desc(deputies.votes)]
+    });
+
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ type: "VOTE_UPDATE", deputies: updatedDeputies }));
+      }
+    });
+
+    res.sendStatus(200);
   });
 
   app.get("/api/users", async (_req, res) => {
-    const users = await db.query.users.findMany(); 
+    const users = await db.query.users.findMany(); // Assuming a 'users' model in your database
     res.json(users);
   });
 

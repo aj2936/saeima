@@ -15,25 +15,11 @@ export default function AuthPage() {
   const { user, loginMutation, registerMutation } = useAuth();
   const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [registerData, setRegisterData] = useState({ username: "", password: "" });
-  const [error, setError] = useState("");
 
   if (user) {
     setLocation("/vote");
     return null;
   }
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!registerData.username || !registerData.password) {
-      setError("Lūdzu aizpildiet visus laukus");
-      return;
-    }
-    try {
-      await registerMutation.mutateAsync(registerData);
-    } catch (err) {
-      setError("Reģistrācija neizdevās. Mēģiniet vēlreiz.");
-    }
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -49,34 +35,6 @@ export default function AuthPage() {
                 <TabsTrigger value="login">Pieslēgties</TabsTrigger>
                 <TabsTrigger value="register">Reģistrēties</TabsTrigger>
               </TabsList>
-              
-              <TabsContent value="register">
-                <form onSubmit={handleRegister}>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="register-username">Lietotājvārds</Label>
-                      <Input
-                        id="register-username"
-                        value={registerData.username}
-                        onChange={(e) => setRegisterData({ ...registerData, username: e.target.value })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="register-password">Parole</Label>
-                      <Input
-                        id="register-password"
-                        type="password"
-                        value={registerData.password}
-                        onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-                      />
-                    </div>
-                    {error && <p className="text-red-500 text-sm">{error}</p>}
-                    <Button type="submit" className="w-full">
-                      Reģistrēties
-                    </Button>
-                  </div>
-                </form>
-              </TabsContent>
 
               <TabsContent value="login">
                 <form
