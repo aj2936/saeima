@@ -77,8 +77,8 @@ export function setupAuth(app: Express) {
 
       const existingUser = await storage.getUserByUsername(data.username);
       if (existingUser) {
-        return res.status(400).json({ 
-          message: "Lietotājs ar šādu e-pasta adresi jau eksistē" 
+        return res.json({ 
+          message: "Lūdzu ievadiet e-pasta adresi ar @gmail.com" 
         });
       }
 
