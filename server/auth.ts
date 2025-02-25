@@ -17,7 +17,7 @@ declare global {
 const scryptAsync = promisify(scrypt);
 
 const registerSchema = z.object({
-  username: z.string().regex(/^[^\s@]+@gmail\.com$/, "Lūdzu ievadiet e-pasta adresi ar @gmail.com"),
+  username: z.string().min(1, "Lūdzu ievadiet lietotājvārdu"),
   password: z.string().min(1, "Parolei jābūt vismaz 1 simbolam garam"),
 });
 
