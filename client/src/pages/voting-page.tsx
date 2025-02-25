@@ -77,7 +77,7 @@ export default function VotingPage() {
         <div>
           <h1 className="text-4xl font-bold">Balso par Deputātiem</h1>
           <p className="text-muted-foreground">
-            Sveiki! Jums atlikušas {remainingVotes} balsis
+            Jums atlikušas {remainingVotes} balsis
           </p>
         </div>
         <Link href="/">
