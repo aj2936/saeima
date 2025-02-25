@@ -1,3 +1,4 @@
+
 import { users, deputies, userVotes, type User, type InsertUser, type Deputy, type UserVote } from "@shared/schema";
 import session from "express-session";
 import createMemoryStore from "memorystore";
@@ -44,7 +45,6 @@ export class MemStorage implements IStorage {
       { id: "8", name: "Artūrs Butāns", faction: "Frakcija \"Nacionālā apvienība\"", votes: 0 },
       { id: "9", name: "Andrejs Ceļapīters", faction: "Pie frakcijām nepiederošie deputāti", votes: 0 },
       { id: "10", name: "Edmunds Cepurītis", faction: "Frakcija PROGRESĪVIE", votes: 0 }
-      //rest of the deputy data is omitted for brevity, but should be included in a production environment.
     ];
 
     for (const deputy of deputyData) {
