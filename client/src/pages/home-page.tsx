@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { SlidersHorizontal } from "lucide-react";
 
-const DEPUTIES_PER_PAGE = 10;
+const DEPUTIES_PER_PAGE = 25;
 
 export default function HomePage() {
   const { deputies, isLoading } = useDeputies();
@@ -104,12 +104,12 @@ export default function HomePage() {
         {/* Filter toggle button */}
         <div className="mb-6">
           <Button
-            variant="outline"
+            variant="ghost"
             onClick={() => setShowFilters(!showFilters)}
-            className="w-full sm:w-auto flex items-center gap-2"
+            className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2"
           >
             <SlidersHorizontal className="w-4 h-4" />
-            {showFilters ? "Paslēpt filtrus" : "Rādīt filtrus"}
+            Rādīt filtrus
           </Button>
         </div>
 
@@ -187,8 +187,8 @@ export default function HomePage() {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={handlePreviousPage}
                 disabled={currentPage === 1}
                 className="gap-2"
@@ -208,8 +208,8 @@ export default function HomePage() {
               </PaginationItem>
             ))}
             <PaginationItem>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages}
                 className="gap-2"
