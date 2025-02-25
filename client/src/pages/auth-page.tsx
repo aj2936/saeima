@@ -76,7 +76,7 @@ export default function AuthPage() {
                     </Button>
                   </div>
                 </form>
-              </TabsContent>absContent>List>
+              </TabsContent>
 
               <TabsContent value="login">
                 <form
