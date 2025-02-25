@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert } from "@/components/ui/alert";
 
 export default function AuthPage() {
   const [, setLocation] = useLocation();
@@ -69,9 +68,9 @@ export default function AuthPage() {
                     />
                   </div>
                   {loginMutation.error && (
-                    <div className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded">
+                    <p className="text-sm text-red-500">
                       {loginMutation.error.message}
-                    </div>
+                    </p>
                   )}
                   <Button
                     type="submit"
@@ -121,9 +120,9 @@ export default function AuthPage() {
                     />
                   </div>
                   {registerMutation.error && (
-                    <div className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded">
+                    <p className="text-sm text-red-500">
                       {registerMutation.error.message}
-                    </div>
+                    </p>
                   )}
                   <Button
                     type="submit"
