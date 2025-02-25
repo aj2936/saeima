@@ -18,31 +18,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/votes", async (_req, res) => {
-    res.json({ votedDeputies: [], hasVoted: false });
+  app.get("/api/votes", async (req, res) => {
+    try {
+      if (!req.user?.id) {
+        return res.json({ votedDeputies: [], hasVoted: false });
+      }
+      const votes = await storage.getUserVotes(req.user.id);
+      res.json(votes);
+    } catch (error) {
+      console.error("Error fetching votes:", error);
+      res.status(500).json({ error: "Failed to fetch votes" });
+    }
   });
 
   app.post("/api/vote/:deputyId", async (req, res) => {
-    if (!req.user?.id) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-    
-    const { deputyId } = req.params;
-    const success = await storage.voteForDeputy(req.user.id, deputyId);
-
-    if (!success) {
-      return res.status(400).json({ message: "Failed to register vote" });
-    }
-
-    const updatedDeputies = await storage.getDeputies();
-
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ type: "VOTE_UPDATE", deputies: updatedDeputies }));
+    try {
+      if (!req.user?.id) {
+        return res.status(401).json({ message: "Nav autorizēts" });
       }
-    });
 
-    res.sendStatus(200);
+      const { deputyId } = req.params;
+      const votes = await storage.getUserVotes(req.user.id);
+
+      if (votes.votedDeputies.length >= 5) {
+        return res.status(400).json({ message: "Jūs jau esat izmantojis visas savas balsis" });
+      }
+
+      if (votes.votedDeputies.includes(deputyId)) {
+        return res.status(400).json({ message: "Jūs jau esat nobalsojis par šo deputātu" });
+      }
+
+      await storage.voteForDeputy(req.user.id, deputyId);
+      const updatedDeputies = await storage.getDeputies();
+
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({ type: "VOTE_UPDATE", deputies: updatedDeputies }));
+        }
+      });
+
+      res.json({ message: "Balss veiksmīgi reģistrēta" });
+    } catch (error) {
+      console.error("Error voting:", error);
+      res.status(500).json({ message: "Neizdevās reģistrēt balsi" });
+    }
   });
 
   return httpServer;

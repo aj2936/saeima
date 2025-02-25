@@ -26,10 +26,16 @@ export default function VotingPage() {
 
   const voteMutation = useMutation({
     mutationFn: async (deputyId: string) => {
-      await apiRequest("POST", `/api/vote/${deputyId}`);
+      const res = await apiRequest("POST", `/api/vote/${deputyId}`);
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/votes"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/deputies"] });
       toast({
         title: "Balss reģistrēta",
         description: "Jūsu balss ir veiksmīgi reģistrēta.",
@@ -38,7 +44,7 @@ export default function VotingPage() {
     onError: (error: any) => {
       toast({
         title: "Balsošana neizdevās",
-        description: "Neizdevās reģistrēt balsi. Lūdzu mēģiniet vēlreiz.",
+        description: error.message || "Neizdevās reģistrēt balsi. Lūdzu mēģiniet vēlreiz.",
         variant: "destructive",
       });
     },
@@ -102,7 +108,7 @@ export default function VotingPage() {
               <Button 
                 variant="destructive"
                 onClick={() => voteMutation.mutate(deputy.id)}
-                disabled={hasVotedFor(deputy.id) || userVotes?.hasVoted}
+                disabled={hasVotedFor(deputy.id) || remainingVotes === 0}
               >
                 Balsot
               </Button>
