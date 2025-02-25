@@ -77,7 +77,7 @@ export function setupAuth(app: Express) {
 
       const existingUser = await storage.getUserByUsername(data.username);
       if (existingUser || !data.username.endsWith('@gmail.com')) {
-        return res.status(400).json({ 
+        return res.json({ 
           message: "Lūdzu mēģiniet vēlreiz ar @gmail.com" 
         });
       }
