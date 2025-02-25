@@ -10,11 +10,15 @@ const app = express();
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false, limit: '10kb' }));
 
-// Rate limiting - 100 pieprasījumi 15 minūtēs
+app.set('trust proxy', true);
+
+// Rate limiting - 500 pieprasījumi 15 minūtēs
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: 'Pārāk daudz pieprasījumu no šīs IP adreses, lūdzu mēģiniet vēlāk'
+  max: 500,
+  message: 'Pārāk daudz pieprasījumu no šīs IP adreses, lūdzu mēģiniet vēlāk',
+  standardHeaders: true,
+  legacyHeaders: false
 });
 
 app.use(limiter);
