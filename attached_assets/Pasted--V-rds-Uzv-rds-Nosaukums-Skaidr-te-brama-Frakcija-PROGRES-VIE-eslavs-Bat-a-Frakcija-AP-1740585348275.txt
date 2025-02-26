@@ -1,0 +1,102 @@
+  Vārds	  Uzvārds	  Nosaukums
+		
+Skaidrīte	Ābrama	Frakcija PROGRESĪVIE
+Česlavs	Batņa	Frakcija “APVIENOTAIS SARAKSTS”
+Raimonds	Bergmanis	Frakcija “APVIENOTAIS SARAKSTS”
+Andris	Bērziņš	Zaļo un Zemnieku savienības frakcija
+Anita	Brakovska	Zaļo un Zemnieku savienības frakcija
+Augusts	Brigmanis	Zaļo un Zemnieku savienības frakcija
+Oļegs	Burovs	Pie frakcijām nepiederošie deputāti
+Artūrs	Butāns	Frakcija “Nacionālā apvienība”
+Andrejs	Ceļapīters	Pie frakcijām nepiederošie deputāti
+Edmunds	Cepurītis	Frakcija PROGRESĪVIE
+Ingrīda	Circene	Frakcija JAUNĀ VIENOTĪBA
+Raimonds	Čudars	Frakcija JAUNĀ VIENOTĪBA
+Svetlana	Čulkova	Frakcija “Stabilitātei!”
+Mārtiņš	Daģis	Frakcija JAUNĀ VIENOTĪBA
+Gundars	Daudze	Zaļo un Zemnieku savienības frakcija
+Dāvis Mārtiņš	Daugavietis	Frakcija JAUNĀ VIENOTĪBA
+Jānis	Dombrava	Frakcija “Nacionālā apvienība”
+Jekaterina	Drelinga	Frakcija “Stabilitātei!”
+Raivis	Dzintars	Frakcija “Nacionālā apvienība”
+Mārtiņš	Felss	Frakcija JAUNĀ VIENOTĪBA
+Alīna	Gendele	Frakcija JAUNĀ VIENOTĪBA
+Ligita	Gintere	Zaļo un Zemnieku savienības frakcija
+Jānis	Grasbergs	Frakcija “Nacionālā apvienība”
+Ilze	Indriksone	Frakcija “Nacionālā apvienība”
+Iļja	Ivanovs	Frakcija “Stabilitātei!”
+Juris	Jakovins	Zaļo un Zemnieku savienības frakcija
+Mārcis	Jencītis	Frakcija LATVIJA PIRMAJĀ VIETĀ
+Andrejs	Judins	Frakcija JAUNĀ VIENOTĪBA
+Igors	Judins	Frakcija “Stabilitātei!”
+Edmunds	Jurēvics	Frakcija JAUNĀ VIENOTĪBA
+Zanda	Kalniņa-Lukaševica	Frakcija JAUNĀ VIENOTĪBA
+Inese	Kalniņa	Frakcija JAUNĀ VIENOTĪBA
+Irma	Kalniņa	Frakcija JAUNĀ VIENOTĪBA
+Aleksandrs	Kiršteins	Pie frakcijām nepiederošie deputāti
+Jefimijs	Klementjevs	Frakcija “Stabilitātei!”
+Jurģis	Klotiņš	Frakcija “Nacionālā apvienība”
+Līga	Kļaviņa	Zaļo un Zemnieku savienības frakcija
+Dmitrijs	Kovaļenko	Frakcija “Stabilitātei!”
+Līga	Kozlovska	Zaļo un Zemnieku savienības frakcija
+Agnese	Krasta	Frakcija JAUNĀ VIENOTĪBA
+Ģirts Valdis	Kristovskis	Frakcija JAUNĀ VIENOTĪBA
+Kristaps	Krištopans	Frakcija LATVIJA PIRMAJĀ VIETĀ
+Māris	Kučinskis	Frakcija “APVIENOTAIS SARAKSTS”
+Andris	Kulbergs	Frakcija “APVIENOTAIS SARAKSTS”
+Gunārs	Kūtris	Zaļo un Zemnieku savienības frakcija
+Ervins	Labanovskis	Frakcija PROGRESĪVIE
+Atis	Labucis	Frakcija JAUNĀ VIENOTĪBA
+Ainars	Latkovskis	Frakcija JAUNĀ VIENOTĪBA
+Ingmārs	Līdaka	Frakcija “APVIENOTAIS SARAKSTS”
+Linda	Liepiņa	Frakcija LATVIJA PIRMAJĀ VIETĀ
+Gatis	Liepiņš	Frakcija JAUNĀ VIENOTĪBA
+Lauris	Lizbovskis	Frakcija “APVIENOTAIS SARAKSTS”
+Mairita	Lūse	Frakcija PROGRESĪVIE
+Nataļja	Marčenko-Jodko	Frakcija “Stabilitātei!”
+Valdis	Maslovskis	Zaļo un Zemnieku savienības frakcija
+Linda	Matisone	Frakcija “APVIENOTAIS SARAKSTS”
+Daiga	Mieriņa	Zaļo un Zemnieku savienības frakcija
+Uģis	Mitrevics	Frakcija “Nacionālā apvienība”
+Ināra	Mūrniece	Frakcija “Nacionālā apvienība”
+Antoņina	Ņenaševa	Frakcija PROGRESĪVIE
+Jānis	Patmalnieks	Frakcija JAUNĀ VIENOTĪBA
+Ramona	Petraviča	Frakcija LATVIJA PIRMAJĀ VIETĀ
+Viktorija	Pleškāne	Pie frakcijām nepiederošie deputāti
+Viktors	Pučka	Frakcija “Stabilitātei!”
+Nauris	Puntulis	Frakcija “Nacionālā apvienība”
+Edgars	Putra	Frakcija “APVIENOTAIS SARAKSTS”
+Igors	Rajevs	Pie frakcijām nepiederošie deputāti
+Anna	Rancāne	Frakcija JAUNĀ VIENOTĪBA
+Leila	Rasima	Frakcija PROGRESĪVIE
+Jānis	Reirs	Frakcija JAUNĀ VIENOTĪBA
+Harijs	Rokpelnis	Zaļo un Zemnieku savienības frakcija
+Aleksejs	Rosļikovs	Frakcija “Stabilitātei!”
+Uģis	Rotbergs	Frakcija JAUNĀ VIENOTĪBA
+Amils	Saļimovs	Frakcija “Stabilitātei!”
+Jana	Simanovska	Frakcija PROGRESĪVIE
+Jānis	Skrastiņš	Frakcija JAUNĀ VIENOTĪBA
+Zane	Skujiņa-Rubene	Frakcija JAUNĀ VIENOTĪBA
+Edvards	Smiltēns	Frakcija “APVIENOTAIS SARAKSTS”
+Māris	Sprindžuks	Frakcija “APVIENOTAIS SARAKSTS”
+Ilze	Stobova	Frakcija LATVIJA PIRMAJĀ VIETĀ
+Ainārs	Šlesers	Frakcija LATVIJA PIRMAJĀ VIETĀ
+Ričards	Šlesers	Frakcija LATVIJA PIRMAJĀ VIETĀ
+Didzis	Šmits	Pie frakcijām nepiederošie deputāti
+Edvīns	Šnore	Frakcija “Nacionālā apvienība”
+Ģirts	Štekerhofs	Zaļo un Zemnieku savienības frakcija
+Andris	Šuvajevs	Frakcija PROGRESĪVIE
+Atis	Švinka	Frakcija PROGRESĪVIE
+Edgars	Tavars	Frakcija “APVIENOTAIS SARAKSTS”
+Edmunds	Teirumnieks	Frakcija “Nacionālā apvienība”
+Ilze	Vergina	Frakcija JAUNĀ VIENOTĪBA
+Aiva	Vīksna	Frakcija “APVIENOTAIS SARAKSTS”
+Andrejs	Vilks	Zaļo un Zemnieku savienības frakcija
+Juris	Viļums	Frakcija “APVIENOTAIS SARAKSTS”
+Jānis	Vitenbergs	Frakcija “Nacionālā apvienība”
+Jānis	Vucāns	Zaļo un Zemnieku savienības frakcija
+Agita	Zariņa-Stūre	Frakcija JAUNĀ VIENOTĪBA
+Viesturs	Zariņš	Frakcija JAUNĀ VIENOTĪBA
+Edgars	Zelderis	Pie frakcijām nepiederošie deputāti
+Didzis	Zemmers	Zaļo un Zemnieku savienības frakcija
+Edmunds	Zivtiņš	Frakcija LATVIJA PIRMAJĀ VIETĀ
