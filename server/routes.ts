@@ -80,5 +80,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Simple API endpoint to view user data and vote counts
+  app.get("/api/data-export", async (req, res) => {
+    try {
+      const { key } = req.query;
+      // Simple security check - replace 'your-secret-key' with a strong key
+      if (key !== "your-secret-key") {
+        return res.status(401).send("Unauthorized");
+      }
+      
+      const allUsers = await db.select().from(users);
+      const allDeputies = await storage.getDeputies();
+      
+      // Sort deputies by votes (highest first)
+      const sortedDeputies = [...allDeputies].sort((a, b) => b.votes - a.votes);
+      
+      res.json({
+        users: allUsers.map(user => ({
+          id: user.id,
+          username: user.username // This contains the email address
+        })),
+        deputies: sortedDeputies.map(deputy => ({
+          id: deputy.id,
+          name: deputy.name,
+          faction: deputy.faction,
+          votes: deputy.votes
+        }))
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      res.status(500).json({ error: "Failed to fetch data" });
+    }
+  });
+
   return httpServer;
 }
