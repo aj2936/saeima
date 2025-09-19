@@ -7,10 +7,10 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default defineConfig({
-  base: '/saeima/',                                 // GitHub Pages project path
-  root: path.resolve(__dirname, 'client'),          // tell Vite where index.html lives
+  base: '/saeima/',                                  // project path on GitHub Pages
+  root: path.resolve(__dirname, 'client'),           // where index.html lives
   build: {
-    outDir: path.resolve(__dirname, 'docs'),        // put build in /docs at repo root
+    outDir: path.resolve(__dirname, 'docs'),         // emit build to /docs (repo root)
     emptyOutDir: true,
   },
   plugins: [react()],
