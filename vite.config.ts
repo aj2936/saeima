@@ -7,17 +7,16 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default defineConfig({
-  base: '/saeima/',                                  // project path on GitHub Pages
-  root: path.resolve(__dirname, 'client'),           // where index.html lives
-  build: {
-    outDir: path.resolve(__dirname, 'docs'),         // emit build to /docs (repo root)
-    emptyOutDir: true,
-  },
+  base: '/saeima/',
+  root: path.resolve(__dirname, 'client'),
+  build: { outDir: path.resolve(__dirname, 'docs'), emptyOutDir: true },
   plugins: [react()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'client', 'src'),
       '@shared': path.resolve(__dirname, 'shared'),
+      '@components': path.resolve(__dirname, 'client', 'src', 'components'),
+      '@pages': path.resolve(__dirname, 'client', 'src', 'pages'),
     },
   },
 })
